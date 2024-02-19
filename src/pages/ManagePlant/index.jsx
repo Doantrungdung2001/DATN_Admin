@@ -6,20 +6,14 @@ import Loading from '../Loading'
 import { Card } from 'antd'
 import PLANT from '../../services/plantService'
 import useManagePlant from './useManagePlant'
-import SEED from '../../services/seedService'
-import PLANT_FARMING from '../../services/plantFarmingService'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import AddPlantModal from '../../components/ManagePlant/AddPlant'
 
-const { Meta } = Card
 const ManagePlant = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedPlant, setSelectedPlant] = useState(null)
-  const [selectedSeed, setSelectedSeed] = useState(null)
-  const [openSeed, setOpenSeed] = useState(false)
   const [open, setOpen] = useState(false)
   const [openUpdate, setOpenUpdate] = useState(false)
-  const [openPlantFarming, setOpenPlantFarming] = useState(false)
 
   const [api, contextHolder] = notification.useNotification()
   const openNotificationWithIcon = (type, title, content) => {
@@ -31,42 +25,6 @@ const ManagePlant = () => {
   }
 
   const { plantData, isSuccess, isLoading, refetch } = useManagePlant()
-  const onCreate = async (values) => {
-    try {
-      const res = await PLANT.addPlantByRecommendPlantId(selectedPlant.id)
-      if (res.response && res.response?.data?.message === 'Plant already exists') {
-        openNotificationWithIcon('error', 'Thông báo', 'Cây đã tồn tại')
-      } else {
-        const resSeed = await SEED.addSeedByRecommendSeedId({
-          recommendSeedId: selectedSeed.id
-        })
-        if (resSeed.response && resSeed.response?.data?.message === 'Seed already exists') {
-          openNotificationWithIcon('error', 'Thông báo', 'Hạt giống đã tồn tại')
-        } else {
-          const res = await PLANT_FARMING.addPlantFarmingWithRecommendPlantIdAndSeedId({
-            plantId: selectedPlant.id,
-            seedId: selectedSeed.id,
-            data: {
-              isPlantFarmingDefault: true,
-              ...values
-            }
-          })
-          if (res.status === 200) {
-            refetch()
-            openNotificationWithIcon('success', 'Thông báo', 'Thêm thành công')
-          } else {
-            openNotificationWithIcon('error', 'Thông báo', 'Thêm thất bại')
-          }
-          setOpen(false)
-          setOpenSeed(false)
-          setOpenPlantFarming(false)
-        }
-      }
-    } catch (error) {
-      console.error(error)
-      openNotificationWithIcon('error', 'Thông báo', 'Thêm thất bại')
-    }
-  }
 
   const handleAddPlant = async (values) => {
     console.log('values', values)
@@ -130,7 +88,6 @@ const ManagePlant = () => {
   }
 
   const handleUpdatePlant = async (values) => {
-    console.log('values', values)
     try {
       const data = {
         plant_name: values.name,

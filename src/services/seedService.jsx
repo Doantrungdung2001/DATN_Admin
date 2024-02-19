@@ -65,6 +65,34 @@ const SEED = {
       .catch((err) => {
         return err
       })
+  },
+
+  updateSeed: async ({ seedId, data }) => {
+    return await privateHttp({
+      method: 'PATCH',
+      url: `/seed/${seedId}`,
+      data
+    })
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        return err
+      })
+  },
+
+  addSeed: async (data) => {
+    return await privateHttp({
+      method: 'POST',
+      url: '/seed',
+      data
+    })
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        return err
+      })
   }
 }
 
