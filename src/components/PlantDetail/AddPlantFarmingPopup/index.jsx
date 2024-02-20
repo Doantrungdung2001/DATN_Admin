@@ -119,7 +119,7 @@ const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming,
                                     <Input.TextArea
                                       placeholder="Mô tả"
                                       style={{ width: '100%' }}
-                                      autoSize={{ minRows: 3 }}
+                                      autoSize={{ minRows: 5 }}
                                     />
                                   </Form.Item>
                                 </Space>
@@ -145,7 +145,7 @@ const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming,
                     <Input placeholder="Mật độ" style={{ width: '100%' }} />
                   </Form.Item>
                   <Form.Item name={['plantingActivity', 'description']} label="Mô tả">
-                    <Input.TextArea placeholder="Mô tả" style={{ width: '100%' }} autoSize={{ minRows: 3 }} />
+                    <Input.TextArea placeholder="Mô tả" style={{ width: '100%' }} autoSize={{ minRows: 5 }} />
                   </Form.Item>
                 </Space>
               </Form.Item>
@@ -191,7 +191,7 @@ const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming,
                                     <Input.TextArea
                                       placeholder="Mô tả"
                                       style={{ width: '100%' }}
-                                      autoSize={{ minRows: 3 }}
+                                      autoSize={{ minRows: 5 }}
                                     />
                                   </Form.Item>
                                 </Space>
@@ -248,7 +248,7 @@ const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming,
                                     <Input.TextArea
                                       placeholder="Mô tả"
                                       style={{ width: '100%' }}
-                                      autoSize={{ minRows: 3 }}
+                                      autoSize={{ minRows: 5 }}
                                     />
                                   </Form.Item>
                                   <Form.Item label="Giải pháp">
@@ -261,7 +261,7 @@ const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming,
                                                 <Input.TextArea
                                                   placeholder="Giải pháp"
                                                   style={{ width: '100%' }}
-                                                  autoSize={{ minRows: 3 }}
+                                                  autoSize={{ minRows: 5 }}
                                                 />
                                               </Form.Item>
                                               <CloseOutlined onClick={() => removeSolution(subField.name)} />
@@ -273,9 +273,6 @@ const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming,
                                         </>
                                       )}
                                     </Form.List>
-                                  </Form.Item>
-                                  <Form.Item {...field} name={[field.name, 'note']} label="Ghi chú">
-                                    <Input placeholder="Ghi chú" style={{ width: '100%' }} />
                                   </Form.Item>
                                 </Space>
                                 <CloseOutlined onClick={() => remove(field.name)} />

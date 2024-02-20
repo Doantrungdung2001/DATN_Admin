@@ -86,10 +86,10 @@ const AddSeedModal = ({ visible, onCreate, onCancel, isUpdate, seed }) => {
       >
         <Form.Item
           name="thumb"
-          label="Thumbnail"
+          label="Ảnh minh họa"
           valuePropName="fileList"
           getValueFromEvent={normFile}
-          extra="Chọn ảnh thumbnail"
+          extra="Chọn ảnh hạt giống"
         >
           <Upload {...uploadProps} maxCount={1} onChange={handleUploadChange}>
             <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
@@ -103,7 +103,11 @@ const AddSeedModal = ({ visible, onCreate, onCancel, isUpdate, seed }) => {
           <Input />
         </Form.Item>
         <Form.Item name="description" label="Mô tả" rules={[{ required: true, message: 'Vui lòng nhập mô tả!' }]}>
-          <Input.TextArea />
+        <Input.TextArea
+                                      placeholder="Mô tả"
+                                      style={{ width: '100%' }}
+                                      autoSize={{ minRows: 5 }}
+                                    />
         </Form.Item>
       </Form>
     </Modal>

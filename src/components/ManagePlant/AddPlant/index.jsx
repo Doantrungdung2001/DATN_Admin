@@ -85,10 +85,10 @@ const AddPlantModal = ({ visible, onCreate, onCancel, isUpdate, plant }) => {
       >
         <Form.Item
           name="thumb"
-          label="Thumbnail"
+          label="Ảnh minh họa"
           valuePropName="fileList"
           getValueFromEvent={normFile}
-          extra="Chọn ảnh thumbnail"
+          extra="Chọn ảnh cây"
         >
           <Upload {...uploadProps} maxCount={1} onChange={handleUploadChange}>
             <Button icon={<UploadOutlined />}>Chọn ảnh</Button>

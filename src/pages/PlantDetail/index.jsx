@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Collapse, Button, Divider, Popconfirm, Tooltip, notification, Select, List } from 'antd'
+import { Collapse, Button, Divider, Popconfirm, Tooltip, notification, Select, List, Table, Typography } from 'antd'
 import { useParams } from 'react-router-dom'
 import Loading from '../Loading'
 import usePlantDetail from './usePlantDetail'
@@ -11,7 +11,7 @@ import AddPlantFarmingPopup from '../../components/PlantDetail/AddPlantFarmingPo
 const { Option } = Select
 
 const { Panel } = Collapse
-
+const { Paragraph } = Typography
 const PlantDetail = () => {
   const plantId = useParams().id
 
@@ -198,6 +198,113 @@ const PlantDetail = () => {
     }
   }
 
+  const timeCultivatesColumns = [
+    {
+      title: 'Tháng bắt đầu',
+      dataIndex: 'start',
+      key: 'start'
+    },
+    {
+      title: 'Tháng kết thúc',
+      dataIndex: 'end',
+      key: 'end'
+    }
+  ]
+
+  const timeCultivatesDataSource = (item) =>
+    item.timeCultivates.map((timeCultivate, index) => ({
+      ...timeCultivate,
+      key: index
+    }))
+
+  const cultivationActivitiesColumns = [
+    {
+      title: 'Tên hoạt động',
+      dataIndex: 'name',
+      key: 'name'
+    },
+    {
+      title: 'Mô tả',
+      dataIndex: 'description',
+      key: 'description'
+    }
+  ]
+
+  const cultivationActivitiesDataSource = (cultivationActivities) =>
+    cultivationActivities.map((cultivationActivity, index) => ({
+      ...cultivationActivity,
+      key: index
+    }))
+
+  const fertilizationActivitiesColumns = [
+    {
+      title: 'Thời gian',
+      dataIndex: 'fertilizationTime',
+      key: 'fertilizationTime',
+      width: '35%'
+    },
+    {
+      title: 'Loại',
+      dataIndex: 'type',
+      key: 'type',
+      width: '8%',
+      render: (type) => (type === 'baseFertilizer' ? 'Bón lót' : type === 'topFertilizer' ? 'Bón thúc' : type)
+    },
+    {
+      title: 'Mô tả',
+      dataIndex: 'description',
+      key: 'description'
+    }
+  ]
+
+  const fertilizationActivitiesDataSource = (fertilizationActivities) =>
+    fertilizationActivities.map((fertilizationActivity, index) => ({
+      ...fertilizationActivity,
+      key: index
+    }))
+
+  const pestAndDiseaseControlActivitiesColumns = [
+    {
+      title: 'Tên',
+      dataIndex: 'name',
+      key: 'name'
+    },
+    {
+      title: 'Loại',
+      dataIndex: 'type',
+      key: 'type',
+      render: (type) => (type === 'pest' ? 'Sâu' : type === 'disease' ? 'Bệnh' : type)
+    },
+    {
+      title: 'Triệu chứng',
+      dataIndex: 'symptoms',
+      key: 'symptoms'
+    },
+    {
+      title: 'Mô tả',
+      dataIndex: 'description',
+      key: 'description'
+    },
+    {
+      title: 'Giải pháp',
+      dataIndex: 'solution',
+      key: 'solution',
+      render: (solution) => (
+        <ul>
+          {solution.map((sol, index) => (
+            <li key={index}>{sol}</li>
+          ))}
+        </ul>
+      )
+    }
+  ]
+
+  const pestAndDiseaseControlActivitiesDataSource = (pestAndDiseaseControlActivities) =>
+    pestAndDiseaseControlActivities.map((activity, index) => ({
+      ...activity,
+      key: index
+    }))
+
   return (
     <div>
       {contextHolder}
@@ -240,7 +347,7 @@ const PlantDetail = () => {
                     </Option>
                   ))}
                 </Select>
-                <Button type="primary" onClick={handleSave}>
+                <Button type="primary" onClick={handleSave} style={{ marginRight: '0.5rem' }}>
                   Lưu
                 </Button>
                 <Button onClick={handleCancel}>Hủy</Button>
@@ -304,8 +411,8 @@ const PlantDetail = () => {
                         : 'Xóa hạt giống kèm quy trình canh tác'
                     }
                     onConfirm={() => handleDeleteConfirm(item)}
-                    okText="Yes"
-                    cancelText="No"
+                    okText="Có"
+                    cancelText="Không"
                     disabled={item.isSeedDefault}
                   >
                     <Tooltip
@@ -330,8 +437,25 @@ const PlantDetail = () => {
                   </Tooltip>
                 ]}
                 extra={<img width={272} alt="logo" src={item.image} />}
+                style={{ backgroundColor: '#f0f0f0', marginTop: '1rem', borderRadius: '15px' }}
               >
-                <List.Item.Meta title={item.name} description={item.description} />
+                <List.Item.Meta title={item.name} description={
+                          <Paragraph
+                            ellipsis={{
+                              rows: 3,
+                              expandable: true,
+                              symbol: 'đọc thêm',
+                              tooltip: true,
+                              onExpand: function (event) {
+                                console.log('onExpand', event)
+                                event.stopPropagation()
+                                event.preventDefault()
+                              }
+                            }}
+                          >
+                            {item.description}
+                          </Paragraph>
+                        } />
                 <Collapse>
                   <Panel header="Quy trình chi tiết">
                     <Button
@@ -354,80 +478,66 @@ const PlantDetail = () => {
                     />
                     <div>
                       {/* time cultivates: [{ start, end }] */}
-                      <h2> Thoi gian canh tac </h2>
-                      {item.timeCultivates.map((timeCultivate) => (
-                        <div key={timeCultivate._id}>
-                          <p>Thoi gian bat dau: {timeCultivate.start}</p>
-                          <p>Thoi gian ket thuc: {timeCultivate.end}</p>
-                        </div>
-                      ))}
-                    </div>
-                    <Divider />
-                    <div>
-                      {/*  cultivationActivities: [{name, description}] */}
-                      <h2> Hoat dong voi dat </h2>
-                      {item.cultivationActivities.map((cultivationActivity) => (
-                        <div key={cultivationActivity._id}>
-                          <p>Ten hoat dong: {cultivationActivity.name}</p>
-                          <p>Mo ta: {cultivationActivity.description}</p>
-                        </div>
-                      ))}
-                    </div>
-                    <Divider />
-                    <div>
-                      {/*  plantingActivity: {density, description} */}
-                      <h2> Hoat dong trong gieo trong </h2>
-                      <p>Mat do gieo trong: {item.plantingActivity.density}</p>
-                      <p>Mo ta: {item.plantingActivity.description}</p>
-                    </div>
-                    <Divider />
-                    <div>
-                      {/* fertilizationActivities: [fertilizationTime, type, description] */}
-                      <h2> Hoat dong phan bon </h2>
-                      {item.fertilizationActivities.map((fertilizationActivity) => (
-                        <div key={fertilizationActivity._id}>
-                          <p>Thoi gian: {fertilizationActivity.fertilizationTime}</p>
-                          <p>Loai: {fertilizationActivity.type}</p>
-                          <p>Mo ta: {fertilizationActivity.description}</p>
-                        </div>
-                      ))}
-                    </div>
-                    <Divider />
-                    <div>
-                      {/* pestAndDiseaseControlActivities: [{name, type
-                    symptoms
-                    description
-                    solution: [string]
-                    note}] */}
-                      <h2> Hoat dong phong ngua sau, benh </h2>
-                      {item.pestAndDiseaseControlActivities.map((pestAndDiseaseControlActivity) => (
-                        <div key={pestAndDiseaseControlActivity._id}>
-                          <p>Ten: {pestAndDiseaseControlActivity.name}</p>
-                          <p>Loai: {pestAndDiseaseControlActivity.type}</p>
-                          <p>Trieu chung: {pestAndDiseaseControlActivity.symptoms}</p>
-                          <p>Mo ta: {pestAndDiseaseControlActivity.description}</p>
-                          <p>Giai phap:</p>
-                          {pestAndDiseaseControlActivity.solution.map((solution) => (
-                            <p key={solution}>{solution}</p>
-                          ))}
-                          <p>Ghi chu: {pestAndDiseaseControlActivity.note}</p>
-                        </div>
-                      ))}
+                      <h2> Thời gian canh tác </h2>
+                      <Table
+                        columns={timeCultivatesColumns}
+                        dataSource={timeCultivatesDataSource(item)}
+                        pagination={false}
+                      />
                     </div>
                     <Divider />
                     <div>
                       {/* bestTimeCultivate: {start, end} */}
-                      <h2> Thoi gian canh tac tot nhat </h2>
-                      <p>Thoi gian bat dau: {item.bestTimeCultivate.start}</p>
-                      <p>Thoi gian ket thuc: {item.bestTimeCultivate.end}</p>
+                      <h2> Thời gian canh tác tốt nhất </h2>
+                      <p>Tháng bắt đầu: {item.bestTimeCultivate.start}</p>
+                      <p>Tháng kết thúc: {item.bestTimeCultivate.end}</p>
                     </div>
 
                     <Divider />
                     {/* farmingTime: number */}
-                    <p>Thoi gian trong cay: {item.farmingTime}</p>
+                    <p>Thời gian trồng cây: {item.farmingTime} ngày</p>
                     <Divider />
                     {/* harvestTime: number */}
-                    <p>Thoi gian thu hoach: {item.harvestTime}</p>
+                    <p>Thời gian thu hoạch: {item.harvestTime} ngày</p>
+                    <Divider />
+                    <div>
+                      {/* cultivationActivities: [{name, description}] */}
+                      <h2> Hoạt động với đất </h2>
+                      <Table
+                        columns={cultivationActivitiesColumns}
+                        dataSource={cultivationActivitiesDataSource(item.cultivationActivities)}
+                        pagination={false}
+                      />
+                    </div>
+                    <Divider />
+                    <div>
+                      {/*  plantingActivity: {density, description} */}
+                      <h2> Hoạt động trong gieo trồng </h2>
+                      <p>
+                        <strong>Mật độ:</strong> {item.plantingActivity.density}
+                      </p>
+                      <p>
+                        <strong>Mô tả:</strong> {item.plantingActivity.description}
+                      </p>
+                    </div>
+                    <Divider />
+                    <div>
+                      {/* fertilizationActivities: [{ fertilizationTime, type, description }] */}
+                      <h2> Hoạt động phân bón </h2>
+                      <Table
+                        columns={fertilizationActivitiesColumns}
+                        dataSource={fertilizationActivitiesDataSource(item.fertilizationActivities)}
+                      />
+                    </div>
+                    <Divider />
+                    <div>
+                      {/* pestAndDiseaseControlActivities: [{name, type, symptoms, description, solution: [string], note}] */}
+                      <h2> Hoạt động phòng ngừa sâu, bệnh </h2>
+                      <Table
+                        columns={pestAndDiseaseControlActivitiesColumns}
+                        dataSource={pestAndDiseaseControlActivitiesDataSource(item.pestAndDiseaseControlActivities)}
+                      />
+                    </div>
                     <Divider />
                   </Panel>
                 </Collapse>
