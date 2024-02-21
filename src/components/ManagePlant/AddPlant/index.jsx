@@ -98,14 +98,14 @@ const AddPlantModal = ({ visible, onCreate, onCancel, isUpdate, plant }) => {
           <Input />
         </Form.Item>
         <Form.Item name="description" label="Mô tả" rules={[{ required: true, message: 'Vui lòng nhập mô tả!' }]}>
-          <Input.TextArea />
+          <Input.TextArea placeholder="Mô tả" style={{ width: '100%' }} autoSize={{ minRows: 5 }} />
         </Form.Item>
         <Form.Item name="type" label="Loại cây" rules={[{ required: true, message: 'Vui lòng chọn loại cây!' }]}>
           <Select>
-            <Option value="herb">Herb</Option>
-            <Option value="leafy">Leafy</Option>
-            <Option value="root">Root</Option>
-            <Option value="fruit">Fruit</Option>
+            <Option value="herb">Cây gia vị</Option>
+            <Option value="leafy">Cây ăn lá</Option>
+            <Option value="root">Củ</Option>
+            <Option value="fruit">Quả</Option>
           </Select>
         </Form.Item>
       </Form>

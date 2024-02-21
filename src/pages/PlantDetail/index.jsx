@@ -495,10 +495,10 @@ const PlantDetail = () => {
 
                     <Divider />
                     {/* farmingTime: number */}
-                    <p>Thời gian trồng cây: {item.farmingTime} ngày</p>
+                    <p>Thời gian trồng cây: {item.farmingTime || '...'} ngày</p>
                     <Divider />
                     {/* harvestTime: number */}
-                    <p>Thời gian thu hoạch: {item.harvestTime} ngày</p>
+                    <p>Thời gian thu hoạch: {item.harvestTime || '...'} ngày</p>
                     <Divider />
                     <div>
                       {/* cultivationActivities: [{name, description}] */}
@@ -514,10 +514,10 @@ const PlantDetail = () => {
                       {/*  plantingActivity: {density, description} */}
                       <h2> Hoạt động trong gieo trồng </h2>
                       <p>
-                        <strong>Mật độ:</strong> {item.plantingActivity.density}
+                        <strong>Mật độ:</strong> {item.plantingActivity?.density}
                       </p>
                       <p>
-                        <strong>Mô tả:</strong> {item.plantingActivity.description}
+                        <strong>Mô tả:</strong> {item.plantingActivity?.description}
                       </p>
                     </div>
                     <Divider />

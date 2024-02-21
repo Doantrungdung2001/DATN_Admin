@@ -180,9 +180,9 @@ const ManagePlant = () => {
             <List
               grid={{ gutter: 16, xs: 1,
                 sm: 2,
-                md: 4,
+                md: 2,
                 lg: 4,
-                xl: 6,
+                xl: 4,
                 xxl: 4 }}
               dataSource={plantData.filter((plant) => plant.name.toLowerCase().includes(searchQuery.toLowerCase().trim()))}
               pagination={{
@@ -191,6 +191,7 @@ const ManagePlant = () => {
                 },
                 pageSize: 8
               }}
+              style={{width: '100%'}}
               renderItem={(plant) => (
                 <List.Item key={plant._id}>
                   <Card
