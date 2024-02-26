@@ -16,11 +16,10 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element={<AppLayout />}>
-          <Route index element={<Navigate to="/home" />} />
+          <Route index element={<Navigate to="/manage-farms" />} />
           <Route element={<LoginPage />} path="/login" />
         </Route>
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<Auth path={'/login'}>{<Home />}</Auth>} path="home" />
           <Route element={<Auth path={'/login'}>{<ManageFarms />}</Auth>} path="manage-farms" />
           <Route element={<Auth path={'/login'}>{<ManageDistributerPage />}</Auth>} path="manage-distributers" />
           <Route element={<Auth path={'/login'}>{<ManagePlant />}</Auth>} path="manage-plant" />

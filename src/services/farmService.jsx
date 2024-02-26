@@ -20,6 +20,15 @@ const FARM = {
     return result
   },
 
+  logout: async () => {
+    let result = await privateHttp({
+      method: 'POST',
+      url: 'logout'
+    })
+
+    return result
+  },
+
   register: async ({ data }) => {
     let result = await publicHttp({
       method: 'POST',

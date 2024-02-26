@@ -121,7 +121,7 @@ const ManageDistributerPage = () => {
       })
 
       setLoading(false)
-      if (res.status === 201) {
+      if (res.status === 200) {
         openNotificationWithIcon('success', 'Thông báo', 'Thêm thành công')
         refetch()
       } else {

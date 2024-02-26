@@ -263,13 +263,8 @@ const ManageFarmPage = () => {
               onChange={(e) => setSearchText(e.target.value)}
             />
           </div>
-          <div style={{ marginBottom: '10px', marginTop: '20px', textAlign: 'right' }}>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              style={{ marginLeft: 16 }}
-              onClick={() => setModalVisible(true)}
-            >
+          <div style={{ marginBottom: 16 }}>
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
               Thêm mới
             </Button>
           </div>

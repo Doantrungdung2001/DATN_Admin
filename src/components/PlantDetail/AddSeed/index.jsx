@@ -5,7 +5,21 @@ const { getAccessToken, getRefreshToken } = token
 
 const AddSeedModal = ({ visible, onCreate, onCancel, isUpdate, seed }) => {
   const [form] = Form.useForm()
-
+  isUpdate
+    ? form.setFieldsValue({
+        _id: seed?._id,
+        name: seed?.name,
+        description: seed?.description,
+        thumb: [
+          {
+            uid: '-1',
+            name: 'image.png',
+            status: 'done',
+            url: seed?.image
+          }
+        ]
+      })
+    : form.setFieldsValue({})
   const onFinish = (values) => {
     // Gửi giá trị của form (values) đến hàm onCreate để thêm hạt giống
     onCreate(values)
@@ -53,8 +67,10 @@ const AddSeedModal = ({ visible, onCreate, onCancel, isUpdate, seed }) => {
         form
           .validateFields()
           .then((values) => {
-            form.resetFields()
+            form.setFieldsValue(values)
             onFinish(values)
+            onCancel()
+            form.resetFields()
           })
           .catch((info) => {
             console.log('Validate Failed:', info)
