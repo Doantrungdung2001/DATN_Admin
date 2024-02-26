@@ -9,6 +9,7 @@ import Home from './pages/Home'
 import ManagePlant from './pages/ManagePlant'
 import PlantDetail from './pages/PlantDetail'
 import ManageFarms from './pages/ManageFarms'
+import ManageDistributerPage from './pages/ManageDistributers'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Auth path={'/login'}>{<Home />}</Auth>} path="home" />
           <Route element={<Auth path={'/login'}>{<ManageFarms />}</Auth>} path="manage-farms" />
+          <Route element={<Auth path={'/login'}>{<ManageDistributerPage />}</Auth>} path="manage-distributers" />
           <Route element={<Auth path={'/login'}>{<ManagePlant />}</Auth>} path="manage-plant" />
           <Route element={<Auth path={'/login'}>{<PlantDetail />}</Auth>} path="plant/:id" />
         </Route>

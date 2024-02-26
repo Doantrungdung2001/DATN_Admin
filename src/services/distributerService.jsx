@@ -25,6 +25,34 @@ const DISTRIBUTER = {
       .catch((err) => {
         return err
       })
+  },
+
+  addDistributer: async ({ data }) => {
+    return await publicHttp({
+      method: 'POST',
+      url: `/distributer`,
+      data
+    })
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        return err
+      })
+  },
+
+  updateDistributer: async ({ distributerId, data }) => {
+    return await publicHttp({
+      method: 'PATCH',
+      url: `/distributer/${distributerId}`,
+      data
+    })
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        return err
+      })
   }
 }
 

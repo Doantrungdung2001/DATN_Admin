@@ -15,8 +15,9 @@ function getItem(label, key, icon, link) {
 }
 const items = [
   getItem('Quản lý trang trại', '1', <DesktopOutlined />, '/manage-farms'),
-  getItem('Manage Plant', '2', <TeamOutlined />, '/manage-plant'),
-  getItem('Log out', '3', <FileOutlined />)
+  getItem('Quản lý nhà phân phối', '2', <TeamOutlined />, '/manage-distributers'),
+  getItem('Manage Plant', '3', <TeamOutlined />, '/manage-plant'),
+  getItem('Log out', '4', <FileOutlined />)
 ]
 const App = () => {
   useEffect(() => {
