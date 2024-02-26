@@ -14,7 +14,7 @@ function getItem(label, key, icon, link) {
   }
 }
 const items = [
-  getItem('Quản lý trang trại', '1', <DesktopOutlined />, '/home'),
+  getItem('Quản lý trang trại', '1', <DesktopOutlined />, '/manage-farms'),
   getItem('Manage Plant', '2', <TeamOutlined />, '/manage-plant'),
   getItem('Log out', '3', <FileOutlined />)
 ]

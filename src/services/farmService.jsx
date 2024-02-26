@@ -17,7 +17,26 @@ const FARM = {
       }
     })
 
-    console.log('result: ', result)
+    return result
+  },
+
+  register: async ({ data }) => {
+    let result = await publicHttp({
+      method: 'POST',
+      url: 'signup',
+      data
+    })
+
+    return result
+  },
+
+  updateStatusFarm: async ({ farmId, data }) => {
+    let result = await privateHttp({
+      method: 'PATCH',
+      url: `/farm/${farmId}/status`,
+      data
+    })
+
     return result
   },
 
@@ -35,6 +54,15 @@ const FARM = {
       method: 'PATCH',
       url: `/farm`,
       data
+    })
+
+    return result
+  },
+
+  getAllFarms: async () => {
+    let result = await privateHttp({
+      method: 'GET',
+      url: '/farm'
     })
 
     return result

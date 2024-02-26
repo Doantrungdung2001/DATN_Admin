@@ -103,11 +103,7 @@ const AddSeedModal = ({ visible, onCreate, onCancel, isUpdate, seed }) => {
           <Input />
         </Form.Item>
         <Form.Item name="description" label="Mô tả" rules={[{ required: true, message: 'Vui lòng nhập mô tả!' }]}>
-        <Input.TextArea
-                                      placeholder="Mô tả"
-                                      style={{ width: '100%' }}
-                                      autoSize={{ minRows: 5 }}
-                                    />
+          <Input.TextArea placeholder="Mô tả" style={{ width: '100%' }} autoSize={{ minRows: 5 }} />
         </Form.Item>
       </Form>
     </Modal>
