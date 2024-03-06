@@ -1,9 +1,11 @@
 import React from 'react'
 import { Modal, InputNumber, Input, Space, Form, Button, Row, Col, Select, Divider } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
+import { on } from 'events'
 
 const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming, isUpdate }) => {
   const [form] = Form.useForm()
+  isUpdate ? form.setFieldsValue(recommendPlantFarming) : form.setFieldsValue({})
 
   return (
     <Modal
@@ -12,13 +14,18 @@ const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming,
       okText={isUpdate ? 'Cập nhật' : 'Thêm'}
       cancelText="Hủy"
       width={1500}
-      onCancel={onCancel}
+      onCancel={() => {
+        form.resetFields()
+        onCancel()
+      }}
       onOk={() => {
         form
           .validateFields()
           .then((values) => {
-            form.resetFields()
+            form.setFieldsValue(values)
             onCreate(values)
+            onCancel()
+            form.resetFields()
           })
           .catch((error) => {
             console.log('Validation failed:', error)

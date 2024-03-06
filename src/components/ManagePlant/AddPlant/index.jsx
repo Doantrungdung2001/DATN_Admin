@@ -6,6 +6,22 @@ const { Option } = Select
 
 const AddPlantModal = ({ visible, onCreate, onCancel, isUpdate, plant }) => {
   const [form] = Form.useForm()
+  isUpdate
+    ? form.setFieldsValue({
+        _id: plant?._id,
+        name: plant?.name,
+        description: plant?.description,
+        type: plant?.type,
+        thumb: [
+          {
+            uid: '-1',
+            name: 'image.png',
+            status: 'done',
+            url: plant?.image
+          }
+        ]
+      })
+    : form.setFieldsValue({})
 
   const onFinish = (values) => {
     // Gửi giá trị của form (values) đến hàm onCreate để thêm cây
@@ -46,13 +62,18 @@ const AddPlantModal = ({ visible, onCreate, onCancel, isUpdate, plant }) => {
       title={isUpdate ? 'Cập nhật cây' : 'Thêm cây'}
       okText={isUpdate ? 'Cập nhật' : 'Thêm'}
       cancelText="Hủy"
-      onCancel={onCancel}
+      onCancel={() => {
+        form.resetFields()
+        onCancel()
+      }}
       onOk={() => {
         form
           .validateFields()
           .then((values) => {
-            form.resetFields()
+            form.setFieldsValue(values)
             onFinish(values)
+            form.resetFields()
+            onCancel()
           })
           .catch((info) => {
             console.log('Validate Failed:', info)

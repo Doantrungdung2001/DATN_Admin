@@ -178,20 +178,17 @@ const ManagePlant = () => {
           </Row>
           <Row>
             <List
-              grid={{ gutter: 16, xs: 1,
-                sm: 2,
-                md: 2,
-                lg: 4,
-                xl: 4,
-                xxl: 4 }}
-              dataSource={plantData.filter((plant) => plant.name.toLowerCase().includes(searchQuery.toLowerCase().trim()))}
+              grid={{ gutter: 16, xs: 1, sm: 2, md: 2, lg: 4, xl: 4, xxl: 4 }}
+              dataSource={plantData.filter((plant) =>
+                plant.name.toLowerCase().includes(searchQuery.toLowerCase().trim())
+              )}
               pagination={{
                 onChange: (page) => {
                   console.log(page)
                 },
                 pageSize: 8
               }}
-              style={{width: '100%'}}
+              style={{ width: '100%' }}
               renderItem={(plant) => (
                 <List.Item key={plant._id}>
                   <Card

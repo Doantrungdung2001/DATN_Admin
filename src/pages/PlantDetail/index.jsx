@@ -439,23 +439,26 @@ const PlantDetail = () => {
                 extra={<img width={272} alt="logo" src={item.image} />}
                 style={{ backgroundColor: '#f0f0f0', marginTop: '1rem', borderRadius: '15px' }}
               >
-                <List.Item.Meta title={item.name} description={
-                          <Paragraph
-                            ellipsis={{
-                              rows: 3,
-                              expandable: true,
-                              symbol: 'đọc thêm',
-                              tooltip: true,
-                              onExpand: function (event) {
-                                console.log('onExpand', event)
-                                event.stopPropagation()
-                                event.preventDefault()
-                              }
-                            }}
-                          >
-                            {item.description}
-                          </Paragraph>
-                        } />
+                <List.Item.Meta
+                  title={item.name}
+                  description={
+                    <Paragraph
+                      ellipsis={{
+                        rows: 3,
+                        expandable: true,
+                        symbol: 'đọc thêm',
+                        tooltip: true,
+                        onExpand: function (event) {
+                          console.log('onExpand', event)
+                          event.stopPropagation()
+                          event.preventDefault()
+                        }
+                      }}
+                    >
+                      {item.description}
+                    </Paragraph>
+                  }
+                />
                 <Collapse>
                   <Panel header="Quy trình chi tiết">
                     <Button

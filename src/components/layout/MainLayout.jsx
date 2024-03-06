@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { DesktopOutlined, FileOutlined, PieChartOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons'
-import { Breadcrumb, Layout, Menu, theme } from 'antd'
-import { Outlet } from 'react-router-dom'
+import {
+  DesktopOutlined,
+  FileOutlined,
+  PieChartOutlined,
+  TeamOutlined,
+  UserOutlined,
+  LogoutOutlined
+} from '@ant-design/icons'
+import { Breadcrumb, Layout, Menu, Popconfirm, message, theme } from 'antd'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import FARM from '../../services/farmService'
 
 const { Header, Content, Footer, Sider } = Layout
 function getItem(label, key, icon, link) {
@@ -14,9 +22,9 @@ function getItem(label, key, icon, link) {
   }
 }
 const items = [
-  getItem('Quản lý trang trại', '1', <DesktopOutlined />, '/home'),
-  getItem('Manage Plant', '2', <TeamOutlined />, '/manage-plant'),
-  getItem('Log out', '3', <FileOutlined />)
+  getItem('Quản lý trang trại', '1', <DesktopOutlined />, '/manage-farms'),
+  getItem('Quản lý nhà phân phối', '2', <TeamOutlined />, '/manage-distributers'),
+  getItem('Manage Plant', '3', <TeamOutlined />, '/manage-plant')
 ]
 const App = () => {
   useEffect(() => {
@@ -29,20 +37,45 @@ const App = () => {
   }, []) // Chạy một lần khi component mount
 
   const [collapsed, setCollapsed] = useState(false)
-  const [selectedKey, setSelectedKey] = useState('1')
+  const navigate = useNavigate()
+
+  const [selectedKey, setSelectedKey] = useState(
+    items.find((item) => item.link === window.location.pathname)
+      ? items.find((item) => item.link === window.location.pathname).key
+      : '1'
+  )
 
   const {
     token: { colorBgContainer }
   } = theme.useToken()
+
+  const handleLogout = async () => {
+    try {
+      const res = await FARM.logout()
+      if (res.status === 200) {
+        message.success('Đăng xuất thành công')
+        localStorage.removeItem('token')
+        localStorage.removeItem('id')
+        navigate('/login')
+      } else {
+        message.error('Đăng xuất thất bại')
+      }
+    } catch (error) {
+      message.error('Đăng xuất thất bại')
+      console.log('error: ', error)
+    }
+  }
+
   return (
-    <Layout
-      style={{
-        minHeight: '100vh'
-      }}
-    >
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Sider
+        style={{ position: 'fixed', height: '100%', left: 0, zIndex: 1 }}
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" selectedKeys={[selectedKey]} mode="inline">
+        <Menu theme="dark" selectedKeys={[selectedKey]} mode="inline" defaultSelectedKeys={[selectedKey]}>
           {items.map((item) => (
             <Menu.Item key={item.key} onClick={() => setSelectedKey(item.key)}>
               {item.icon}
@@ -50,12 +83,28 @@ const App = () => {
               <Link to={item.link} />
             </Menu.Item>
           ))}
+          <Menu.Item
+            style={{
+              position: 'absolute',
+              bottom: 50,
+              zIndex: 1,
+              transition: 'all 0.2s'
+            }}
+            key="8"
+          >
+            <Popconfirm title="Bạn có chắc chắn muốn đăng xuất?" onConfirm={handleLogout} okText="Yes" cancelText="No">
+              <LogoutOutlined />
+              <span>Đăng xuất</span>
+            </Popconfirm>
+          </Menu.Item>
         </Menu>
       </Sider>
-      <Layout>
+
+      <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
         <Content
           style={{
-            margin: '0 16px'
+            margin: '0 16px',
+            overflow: 'auto' // Thêm thuộc tính overflow: auto để hiển thị thanh cuộn khi nội dung dài hơn kích thước của content
           }}
         >
           <div
@@ -68,15 +117,9 @@ const App = () => {
             <Outlet />
           </div>
         </Content>
-        <Footer
-          style={{
-            textAlign: 'center'
-          }}
-        >
-          Ant Design ©2023 Created by Ant UED
-        </Footer>
       </Layout>
     </Layout>
   )
 }
+
 export default App
