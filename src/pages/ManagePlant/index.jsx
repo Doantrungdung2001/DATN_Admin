@@ -1,25 +1,21 @@
 import React from 'react'
 import { useState } from 'react'
-import { Row, Col, Input, Button, Popconfirm, notification, List, Tooltip } from 'antd'
+import { Row, Col, Input, Button, Popconfirm, notification, List, Tooltip, Typography } from 'antd'
 import { Link } from 'react-router-dom'
 import Loading from '../Loading'
 import { Card } from 'antd'
 import PLANT from '../../services/plantService'
 import useManagePlant from './useManagePlant'
-import SEED from '../../services/seedService'
-import PLANT_FARMING from '../../services/plantFarmingService'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, FallOutlined, RiseOutlined } from '@ant-design/icons'
 import AddPlantModal from '../../components/ManagePlant/AddPlant'
 
-const { Meta } = Card
+const { Paragraph } = Typography
+
 const ManagePlant = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedPlant, setSelectedPlant] = useState(null)
-  const [selectedSeed, setSelectedSeed] = useState(null)
-  const [openSeed, setOpenSeed] = useState(false)
   const [open, setOpen] = useState(false)
   const [openUpdate, setOpenUpdate] = useState(false)
-  const [openPlantFarming, setOpenPlantFarming] = useState(false)
 
   const [api, contextHolder] = notification.useNotification()
   const openNotificationWithIcon = (type, title, content) => {
@@ -31,42 +27,6 @@ const ManagePlant = () => {
   }
 
   const { plantData, isSuccess, isLoading, refetch } = useManagePlant()
-  const onCreate = async (values) => {
-    try {
-      const res = await PLANT.addPlantByRecommendPlantId(selectedPlant.id)
-      if (res.response && res.response?.data?.message === 'Plant already exists') {
-        openNotificationWithIcon('error', 'Thông báo', 'Cây đã tồn tại')
-      } else {
-        const resSeed = await SEED.addSeedByRecommendSeedId({
-          recommendSeedId: selectedSeed.id
-        })
-        if (resSeed.response && resSeed.response?.data?.message === 'Seed already exists') {
-          openNotificationWithIcon('error', 'Thông báo', 'Hạt giống đã tồn tại')
-        } else {
-          const res = await PLANT_FARMING.addPlantFarmingWithRecommendPlantIdAndSeedId({
-            plantId: selectedPlant.id,
-            seedId: selectedSeed.id,
-            data: {
-              isPlantFarmingDefault: true,
-              ...values
-            }
-          })
-          if (res.status === 200) {
-            refetch()
-            openNotificationWithIcon('success', 'Thông báo', 'Thêm thành công')
-          } else {
-            openNotificationWithIcon('error', 'Thông báo', 'Thêm thất bại')
-          }
-          setOpen(false)
-          setOpenSeed(false)
-          setOpenPlantFarming(false)
-        }
-      }
-    } catch (error) {
-      console.error(error)
-      openNotificationWithIcon('error', 'Thông báo', 'Thêm thất bại')
-    }
-  }
 
   const handleAddPlant = async (values) => {
     console.log('values', values)
@@ -130,7 +90,6 @@ const ManagePlant = () => {
   }
 
   const handleUpdatePlant = async (values) => {
-    console.log('values', values)
     try {
       const data = {
         plant_name: values.name,
@@ -153,6 +112,21 @@ const ManagePlant = () => {
       openNotificationWithIcon('error', 'Thông báo', 'Cập nhật thất bại')
     }
     setOpenUpdate(false)
+  }
+
+  const renderPlantType = (type) => {
+    switch (type) {
+      case 'herb':
+        return 'Rau gia vị'
+      case 'leafy':
+        return 'Rau ăn lá'
+      case 'root':
+        return 'Củ'
+      case 'fruit':
+        return 'Quả'
+      default:
+        return type
+    }
   }
 
   return (
@@ -202,23 +176,29 @@ const ManagePlant = () => {
               </div>
             </Col>
           </Row>
-          <Row className="plant-grid">
+          <Row>
             <List
-              grid={{ gutter: 16, column: 4 }}
-              dataSource={plantData}
+              grid={{ gutter: 16, xs: 1,
+                sm: 2,
+                md: 2,
+                lg: 4,
+                xl: 4,
+                xxl: 4 }}
+              dataSource={plantData.filter((plant) => plant.name.toLowerCase().includes(searchQuery.toLowerCase().trim()))}
               pagination={{
                 onChange: (page) => {
                   console.log(page)
                 },
                 pageSize: 8
               }}
+              style={{width: '100%'}}
               renderItem={(plant) => (
                 <List.Item key={plant._id}>
                   <Card
                     hoverable
-                    cover={<img alt="plant" src={plant.image} />}
+                    cover={<img alt={plant.name} src={plant.image} />}
                     actions={[
-                      <Tooltip title="Edit" key="edit">
+                      <Tooltip title="Chỉnh sửa" key="edit">
                         <EditOutlined
                           onClick={() => {
                             setSelectedPlant(plant)
@@ -227,23 +207,23 @@ const ManagePlant = () => {
                         />
                       </Tooltip>,
                       <Popconfirm
-                        title={`Are you sure to ${plant.isActive ? 'deactivate' : 'activate'} this plant?`}
+                        title={`Bạn muốn ${plant.isActive ? 'không công bố' : 'công bố'} cây này`}
                         onConfirm={() => handleConfirmUpdateActive(plant._id, plant.isActive)}
-                        okText="Yes"
-                        cancelText="No"
+                        okText="Có"
+                        cancelText="Không"
                         key="update-isActive"
                       >
                         <span onClick={(e) => e.stopPropagation()}>
-                          <Tooltip title={plant.isActive ? 'Deactivate' : 'Activate'}>
-                            <EditOutlined />
+                          <Tooltip title={plant.isActive ? 'Cập nhật thành không công bố' : 'Cập nhật thành công bố'}>
+                            {plant.isActive ? <FallOutlined /> : <RiseOutlined />}
                           </Tooltip>
                         </span>
                       </Popconfirm>,
                       <Popconfirm
-                        title={`Are you sure to delete this plant?`}
+                        title={`Bạn muốn xóa cây ${plant.name}?`}
                         onConfirm={() => handleDelete(plant._id)}
-                        okText="Yes"
-                        cancelText="No"
+                        okText="Có"
+                        cancelText="Không"
                         key="delete"
                       >
                         <span onClick={(e) => e.stopPropagation()}>
@@ -253,9 +233,28 @@ const ManagePlant = () => {
                     ]}
                   >
                     <Link to={`/plant/${plant._id}`}>
-                      <Card.Meta title={plant.name} description={`Description: ${plant.description}`} />
-                      <p>Type: {plant.type}</p>
-                      <p>Status: {plant.isActive ? 'Active' : 'Inactive'}</p>
+                      <Card.Meta
+                        title={plant.name}
+                        description={
+                          <Paragraph
+                            ellipsis={{
+                              rows: 3,
+                              expandable: true,
+                              symbol: 'đọc thêm',
+                              tooltip: true,
+                              onExpand: function (event) {
+                                console.log('onExpand', event)
+                                event.stopPropagation()
+                                event.preventDefault()
+                              }
+                            }}
+                          >
+                            {plant.description}
+                          </Paragraph>
+                        }
+                      />
+                      <p>{renderPlantType(plant.type)}</p>
+                      <p>Trạng thái: {plant.isActive ? 'Đã công bố' : 'Chưa công bố'}</p>
                     </Link>
                   </Card>
                 </List.Item>

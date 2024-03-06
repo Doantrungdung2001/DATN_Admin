@@ -69,6 +69,20 @@ const PLANT_FARMING = {
       })
   },
 
+  addPlantFarmingWithPlantIdAndSeedName: async ({ plantId, seedName, data }) => {
+    return await privateHttp({
+      method: 'POST',
+      url: `/plantFarming/addPlantFarmingWithPlantIdAndSeedName/${plantId}/${seedName}`,
+      data
+    })
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        return err
+      })
+  },
+
   updatePlantFarming: async ({ plantFarmingId, data }) => {
     return await privateHttp({
       method: 'PATCH',

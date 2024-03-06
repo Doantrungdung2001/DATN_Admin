@@ -1,14 +1,13 @@
-import { Modal, Form, Input, Upload, Button, Select } from 'antd'
+import { Modal, Form, Input, Upload, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import token from '../../../utils/token'
 const { getAccessToken, getRefreshToken } = token
-const { Option } = Select
 
-const AddPlantModal = ({ visible, onCreate, onCancel, isUpdate, plant }) => {
+const AddSeedModal = ({ visible, onCreate, onCancel, isUpdate, seed }) => {
   const [form] = Form.useForm()
 
   const onFinish = (values) => {
-    // Gửi giá trị của form (values) đến hàm onCreate để thêm cây
+    // Gửi giá trị của form (values) đến hàm onCreate để thêm hạt giống
     onCreate(values)
     form.resetFields()
   }
@@ -43,10 +42,13 @@ const AddPlantModal = ({ visible, onCreate, onCancel, isUpdate, plant }) => {
   return (
     <Modal
       open={visible}
-      title={isUpdate ? 'Cập nhật cây' : 'Thêm cây'}
+      title={isUpdate ? 'Cập nhật hạt giống' : 'Thêm hạt giống'}
       okText={isUpdate ? 'Cập nhật' : 'Thêm'}
       cancelText="Hủy"
-      onCancel={onCancel}
+      onCancel={() => {
+        form.resetFields()
+        onCancel()
+      }}
       onOk={() => {
         form
           .validateFields()
@@ -67,16 +69,15 @@ const AddPlantModal = ({ visible, onCreate, onCancel, isUpdate, plant }) => {
         initialValues={
           isUpdate
             ? {
-                _id: plant?._id,
-                name: plant?.name,
-                description: plant?.description,
-                type: plant?.type,
+                _id: seed?._id,
+                name: seed?.name,
+                description: seed?.description,
                 thumb: [
                   {
                     uid: '-1',
                     name: 'image.png',
                     status: 'done',
-                    url: plant?.image
+                    url: seed?.image
                   }
                 ]
               }
@@ -88,29 +89,29 @@ const AddPlantModal = ({ visible, onCreate, onCancel, isUpdate, plant }) => {
           label="Ảnh minh họa"
           valuePropName="fileList"
           getValueFromEvent={normFile}
-          extra="Chọn ảnh cây"
+          extra="Chọn ảnh hạt giống"
         >
           <Upload {...uploadProps} maxCount={1} onChange={handleUploadChange}>
             <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
           </Upload>
         </Form.Item>
-        <Form.Item name="name" label="Tên cây" rules={[{ required: true, message: 'Vui lòng nhập tên cây!' }]}>
+        <Form.Item
+          name="name"
+          label="Tên hạt giống"
+          rules={[{ required: true, message: 'Vui lòng nhập tên hạt giống!' }]}
+        >
           <Input />
         </Form.Item>
         <Form.Item name="description" label="Mô tả" rules={[{ required: true, message: 'Vui lòng nhập mô tả!' }]}>
-          <Input.TextArea placeholder="Mô tả" style={{ width: '100%' }} autoSize={{ minRows: 5 }} />
-        </Form.Item>
-        <Form.Item name="type" label="Loại cây" rules={[{ required: true, message: 'Vui lòng chọn loại cây!' }]}>
-          <Select>
-            <Option value="herb">Cây gia vị</Option>
-            <Option value="leafy">Cây ăn lá</Option>
-            <Option value="root">Củ</Option>
-            <Option value="fruit">Quả</Option>
-          </Select>
+        <Input.TextArea
+                                      placeholder="Mô tả"
+                                      style={{ width: '100%' }}
+                                      autoSize={{ minRows: 5 }}
+                                    />
         </Form.Item>
       </Form>
     </Modal>
   )
 }
 
-export default AddPlantModal
+export default AddSeedModal
