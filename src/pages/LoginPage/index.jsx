@@ -36,7 +36,7 @@ const LoginPage = () => {
         localStorage.setItem('id', id)
       }
       console.log('Login success')
-      navigate('/home')
+      navigate('/manage-farms')
     } catch (error) {
       console.error(error?.response?.data?.message)
     }

@@ -35,7 +35,11 @@ privateHttp.interceptors.response.use(
   },
   (error) => {
     console.log('error: ', error)
-    if (error.response.status === 401 && error.response.statusText === 'Unauthorized') {
+    if (
+      (error.response?.status === 401 && error.response?.data?.message === 'Invalid request') ||
+      (error.response?.status === 404 && error.response?.data?.message === 'Not found keyStore') ||
+      (error.response?.status === 500 && error.response?.data?.message === 'Command find requires authentication')
+    ) {
       token.removeAccessToken()
       alert('Need to login')
       window.location.href = '/login'
