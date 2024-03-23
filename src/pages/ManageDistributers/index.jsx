@@ -162,6 +162,24 @@ const ManageDistributerPage = () => {
 
   const handleDeleteDistributer = async ({ distributerId }) => {
     // Xử lý xóa distributer ở đây
+    setLoading(true)
+    try {
+      const res = await DISTRIBUTER.deleteDistributer({
+        distributerId
+      })
+
+      setLoading(false)
+      if (res.status === 200) {
+        openNotificationWithIcon('success', 'Thông báo', 'Xóa thành công')
+        refetch()
+      } else {
+        openNotificationWithIcon('error', 'Thông báo', 'Xóa thất bại')
+      }
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+      openNotificationWithIcon('error', 'Thông báo', 'Xóa thất bại')
+    }
   }
 
   const handleUpdateDistributer = async (values) => {

@@ -54,6 +54,19 @@ const DISTRIBUTER = {
       .catch((err) => {
         return err
       })
+  },
+
+  deleteDistributer: async ({ distributerId }) => {
+    return await privateHttp({
+      method: 'DELETE',
+      url: `/distributer/${distributerId}`
+    })
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        return err
+      })
   }
 }
 
