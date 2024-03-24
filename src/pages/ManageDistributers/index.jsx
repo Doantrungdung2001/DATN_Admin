@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Space, Table, Input, Modal, Form, Popconfirm, Spin, notification, Tooltip } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, FallOutlined, RiseOutlined } from '@ant-design/icons'
 import useManageDistributers from './useManageDistributers'
-import { formatDateTime, titleCase } from '../../utils/helpers'
+import { formatDateTime, formatTextTable } from '../../utils/helpers'
 import DISTRIBUTER from '../../services/distributerService'
 
 const { Search } = Input
@@ -216,7 +216,13 @@ const ManageDistributerPage = () => {
     {
       title: 'ID',
       dataIndex: '_id',
-      key: '_id'
+      key: '_id',
+      render: (text) =>
+        formatTextTable({
+          str: text,
+          a: 8,
+          b: 5
+        })
     },
     {
       title: 'Tên',

@@ -11,12 +11,14 @@ import {
   notification,
   Tooltip,
   Select,
-  InputNumber
+  InputNumber,
+  DatePicker
 } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import useManageTransfer from './useManageTransfer'
-import { formatDateTime } from '../../utils/helpers'
+import { formatDateTime, formatTextTable, formatTransactionHashTable } from '../../utils/helpers'
 import TRANSFER from '../../services/transferService'
+import dayjs from 'dayjs'
 
 const { Search } = Input
 
@@ -24,6 +26,7 @@ const AddTransferModal = ({ visible, onCancel, onAdd, selectedOutput, isUpdate, 
   const [form] = Form.useForm()
   form.setFieldsValue({
     farm: selectedOutput?.farm._id || '',
+    time: selectedOutput?.time ? dayjs(selectedOutput.time) : dayjs(new Date()),
     tx: selectedOutput?.tx || '',
     address: selectedOutput?.address || '',
     amount: selectedOutput?.amount || ''
@@ -34,8 +37,8 @@ const AddTransferModal = ({ visible, onCancel, onAdd, selectedOutput, isUpdate, 
   return (
     <Modal
       open={visible}
-      title="Thêm transfer mới"
-      okText="Thêm"
+      title={isUpdate ? 'Cập nhật thông tin chuyển tiền' : 'Thêm mới thông tin chuyển tiền'}
+      okText={isUpdate ? 'Cập nhật' : 'Thêm mới'}
       cancelText="Hủy"
       onCancel={() => {
         form.resetFields()
@@ -52,13 +55,15 @@ const AddTransferModal = ({ visible, onCancel, onAdd, selectedOutput, isUpdate, 
                 transferId: selectedOutput._id,
                 farm: values?.farm,
                 tx: values?.tx,
-                amount: values?.amount
+                amount: values?.amount,
+                time: values?.time
               }
             } else {
               data = {
                 farm: values?.farm,
                 tx: values?.tx,
-                amount: values?.amount
+                amount: values?.amount,
+                time: values?.time
               }
             }
             onAdd(data)
@@ -71,30 +76,41 @@ const AddTransferModal = ({ visible, onCancel, onAdd, selectedOutput, isUpdate, 
       }}
     >
       <Form form={form} layout="vertical">
-        <Form.Item name="farm" label="Farm" rules={[{ required: true, message: 'Vui lòng chọn Farm' }]}>
-          <Select placeholder="Chọn Farm" showSearch filterOption={filterOption}>
-            {allFarms.map((farm) => (
-              <Select.Option key={farm._id} value={farm._id}>
-                {farm.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
         <Form.Item
-          name="tx"
-          label="Tx"
+          name="time"
+          label="Thời gian"
           rules={[
-            { required: true, message: 'Vui lòng nhập Tx' },
             {
-              type: 'tx',
-              message: 'Please enter a valid tx address!'
+              required: true,
+              message: 'Thời gian không được để trống'
             }
           ]}
         >
-          <Input />
+          <DatePicker showTime />
         </Form.Item>
-        <Form.Item name="amount" label="Amount" rules={[{ required: true, message: 'Vui lòng nhập Amount' }]}>
-          <InputNumber min={0} placeholder="Nhập Amount" />
+        <Form.Item name="farm" label="Trang trại" rules={[{ required: true, message: 'Vui lòng chọn trang trại' }]}>
+          <Select
+            placeholder="Chọn trang trại"
+            showSearch
+            filterOption={filterOption}
+            options={allFarms.map((farm) => ({ value: farm._id, label: farm.name }))}
+          />
+        </Form.Item>
+        <Form.Item
+          name="tx"
+          label="Transaction hash"
+          rules={[
+            { required: true, message: 'Vui lòng nhập Transaction hash' },
+            {
+              type: 'tx',
+              message: 'Please enter a valid Transaction hash!'
+            }
+          ]}
+        >
+          <Input placeholder="Nhập transaction hash" />
+        </Form.Item>
+        <Form.Item name="amount" label="Lượng" rules={[{ required: true, message: 'Vui lòng nhập Lượng' }]}>
+          <InputNumber min={0} placeholder="Nhập Lượng" style={{ width: '100%' }} addonAfter="EVMOS" />
         </Form.Item>
       </Form>
     </Modal>
@@ -131,7 +147,8 @@ const ManageTransferPage = () => {
         data: {
           farm: values.farm,
           tx: values.tx,
-          amount: values.amount
+          amount: values.amount,
+          time: values.time
         }
       })
 
@@ -174,7 +191,7 @@ const ManageTransferPage = () => {
   const handleUpdateTransfer = async (values) => {
     // Xử lý cập nhật transfer ở đây
     setLoading(true)
-    const { transferId, farm, tx, amount } = values
+    const { transferId, farm, tx, amount, time } = values
     console.log('Update transfer:', transferId, farm, tx, amount)
     try {
       const res = await TRANSFER.updateTransfer({
@@ -182,7 +199,8 @@ const ManageTransferPage = () => {
         data: {
           farm,
           tx,
-          amount
+          amount,
+          time
         }
       })
 
@@ -204,31 +222,43 @@ const ManageTransferPage = () => {
     {
       title: 'ID',
       dataIndex: '_id',
-      key: '_id'
+      key: '_id',
+      render: (text) =>
+        formatTextTable({
+          str: text,
+          a: 8,
+          b: 5
+        })
     },
     {
-      title: 'Farm',
+      title: 'Thời gian',
+      dataIndex: 'time',
+      key: 'time',
+      sorter: (a, b) => new Date(a.time) - new Date(b.time),
+      render: (text, record) => formatDateTime(record?.time)
+    },
+    {
+      title: 'Tên trang trại',
       dataIndex: 'farm',
       key: 'farm',
       render: (text, record) => record.farm?.name
     },
     {
-      title: 'Tx',
+      title: 'Transaction hash',
       dataIndex: 'tx',
-      key: 'tx'
+      key: 'tx',
+      render: (text) =>
+        formatTransactionHashTable({
+          str: text,
+          a: 8,
+          b: 5
+        })
     },
     {
-      title: 'Amount',
+      title: 'Lượng (EVMOS)',
       dataIndex: 'amount',
       key: 'amount',
       sorter: (a, b) => a.amount - b.amount
-    },
-    {
-      title: 'Ngày tham gia',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
-      render: (text, record) => formatDateTime(record.createdAt)
     },
     {
       title: 'Action',
@@ -264,10 +294,10 @@ const ManageTransferPage = () => {
       {contextHolder}
       {isSuccess && isSuccessFarm && (
         <div>
-          <h1>Danh sách các </h1>
+          <h1>Danh sách các lần cấp tiền </h1>
           <div style={{ marginBottom: 16 }}>
             <Search
-              placeholder="Tìm kiếm theo ID, Tên farm, Tx"
+              placeholder="Tìm kiếm theo ID, Tên trang trại, transaction hash"
               allowClear
               enterButton
               onSearch={handleSearch}

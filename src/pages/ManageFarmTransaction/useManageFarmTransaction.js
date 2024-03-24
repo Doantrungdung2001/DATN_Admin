@@ -10,7 +10,8 @@ export default function useManageEvents() {
       fee: item?.fee,
       timestamp: item?.timestamp,
       event: item?.event,
-      farm: item?.farm?.name
+      farm: item?.farm?.name,
+      tx: item?.tx
     }))
     return { allEvent }
   }, [])

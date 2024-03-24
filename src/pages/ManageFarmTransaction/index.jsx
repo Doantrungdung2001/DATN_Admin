@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Table, Spin } from 'antd'
 import useManageEvents from './useManageFarmTransaction'
 import Search from 'antd/es/input/Search'
-import { formatDateTime } from '../../utils/helpers'
+import { formatDateTime, formatTextTable, formatTransactionHashTable } from '../../utils/helpers'
 
 const ManageFarmTransaction = () => {
   const [searchText, setSearchText] = useState('')
@@ -11,30 +11,47 @@ const ManageFarmTransaction = () => {
 
   const columns = [
     {
-      title: 'Timestamp',
+      title: 'Thời gian',
       dataIndex: 'timestamp',
       key: 'timestamp',
       sorter: (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
       render: (text) => formatDateTime(text)
     },
     {
-      title: 'Wallet Address',
+      title: 'Địa chỉ ví',
       dataIndex: 'walletAddress',
-      key: 'walletAddress'
+      key: 'walletAddress',
+      render: (text) =>
+        formatTextTable({
+          str: text,
+          a: 8,
+          b: 5
+        })
     },
     {
-      title: 'Farm',
+      title: 'Tên trang trại',
       dataIndex: 'farm',
       key: 'farm'
     },
     {
-      title: 'Fee',
+      title: 'Transaction hash',
+      dataIndex: 'tx',
+      key: 'tx',
+      render: (text) =>
+        formatTransactionHashTable({
+          str: text,
+          a: 8,
+          b: 5
+        })
+    },
+    {
+      title: 'Phí giao dịch (EVMOS)',
       dataIndex: 'fee',
       key: 'fee',
       sorter: (a, b) => a.fee - b.fee
     },
     {
-      title: 'Event',
+      title: 'Tên Event',
       dataIndex: 'event',
       key: 'event',
       filters: [
@@ -53,10 +70,10 @@ const ManageFarmTransaction = () => {
 
   return (
     <div>
-      <h1>Danh sách các giao dịch của trang trại</h1>
+      <h1>Danh sách các giao dịch của các trang trại</h1>
       <div style={{ marginBottom: 16 }}>
         <Search
-          placeholder="Tìm kiếm farm, wallet address"
+          placeholder="Tìm kiếm farm, Địa chỉ ví"
           allowClear
           enterButton
           onSearch={handleSearch}

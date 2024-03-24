@@ -10,7 +10,7 @@ export default function useManageTransfers() {
       farm: item?.farm,
       tx: item?.tx,
       amount: item?.amount,
-      createdAt: item?.createdAt
+      time: item?.time
     }))
     return { allTransfer }
   }, [])

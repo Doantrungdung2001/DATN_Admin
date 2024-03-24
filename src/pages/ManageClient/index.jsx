@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Table, Input, Popconfirm, Spin, notification, Tooltip } from 'antd'
 import { DeleteOutlined, FallOutlined, RiseOutlined } from '@ant-design/icons'
-import { formatDateTime } from '../../utils/helpers'
+import { formatDateTime, formatTextTable } from '../../utils/helpers'
 import useManageClient from './useManageClient'
 import CLIENT from '../../services/clientService'
 
@@ -78,7 +78,13 @@ const ManageClient = () => {
     {
       title: 'ID',
       dataIndex: '_id',
-      key: '_id'
+      key: '_id',
+      render: (text) =>
+        formatTextTable({
+          str: text,
+          a: 8,
+          b: 5
+        })
     },
     {
       title: 'Tên',

@@ -88,7 +88,7 @@ const UpdateWalletAddressModal = ({ visible, onCancel, onUpdate, farm }) => {
   return (
     <Modal
       open={visible}
-      title="Cập nhật wallet address"
+      title="Cập nhật Địa chỉ ví"
       okText="Cập nhật"
       cancelText="Hủy"
       onCancel={() => {
@@ -115,7 +115,7 @@ const UpdateWalletAddressModal = ({ visible, onCancel, onUpdate, farm }) => {
           walletAddress: farm?.walletAddress
         }}
       >
-        <Form.Item name="walletAddress" label="Wallet Address">
+        <Form.Item name="walletAddress" label="Địa chỉ ví">
           <Input />
         </Form.Item>
       </Form>
@@ -239,7 +239,7 @@ const ManageFarmPage = () => {
         })
     },
     {
-      title: 'Wallet Address',
+      title: 'Địa chỉ ví',
       dataIndex: 'walletAddress',
       key: 'walletAddress',
       render: (text) =>
@@ -327,7 +327,7 @@ const ManageFarmPage = () => {
             </Tooltip>
           </Popconfirm>
           <Tooltip
-            title="Edit wallet address"
+            title="Chỉnh sửa Địa chỉ ví"
             onClick={() => {
               setSelectedFarm(record)
               setModalUpdateVisible(true)
@@ -348,7 +348,7 @@ const ManageFarmPage = () => {
           <h1>Danh sách các trang trại</h1>
           <div style={{ marginBottom: 16 }}>
             <Search
-              placeholder="Tìm kiếm theo ID, Wallet Address, Tên, Email, Địa chỉ"
+              placeholder="Tìm kiếm theo ID, Địa chỉ ví, Tên, Email, Địa chỉ"
               allowClear
               enterButton
               onSearch={handleSearch}
@@ -389,7 +389,7 @@ const ManageFarmPage = () => {
             visible={modalUpdateVisible}
             onCancel={() => setModalUpdateVisible(false)}
             onUpdate={(values) => {
-              console.log('Updated wallet address:', values)
+              console.log('Updated Địa chỉ ví:', values)
               handleUpdateWalletAddress({ farmId: selectedFarm._id, walletAddress: values.walletAddress || '' })
               setModalUpdateVisible(false)
             }}
