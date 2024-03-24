@@ -14,7 +14,8 @@ export default function useManageFarms() {
       district: farm.district,
       address: farm.address,
       createdAt: farm.createdAt,
-      email: farm.email
+      email: farm.email,
+      walletAddress: farm?.walletAddress
     }))
 
     // get all districts unique in allFarms, and return an array of all districts that has value = farm.district and text = tittle case of farm.district

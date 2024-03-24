@@ -49,6 +49,16 @@ const FARM = {
     return result
   },
 
+  updateWalletAddress: async ({ farmId, data }) => {
+    let result = await privateHttp({
+      method: 'PATCH',
+      url: `/farm/${farmId}/walletAddress`,
+      data
+    })
+
+    return result
+  },
+
   getProfile: async ({ farmId }) => {
     let result = await publicHttp({
       method: 'GET',
