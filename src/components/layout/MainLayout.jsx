@@ -25,7 +25,8 @@ const items = [
   getItem('Quản lý trang trại', '1', <DesktopOutlined />, '/manage-farms'),
   getItem('Quản lý nhà phân phối', '2', <TeamOutlined />, '/manage-distributers'),
   getItem('Manage Client', '3', <TeamOutlined />, '/manage-client'),
-  getItem('Manage Plant', '4', <TeamOutlined />, '/manage-plant')
+  getItem('Manage Plant', '4', <TeamOutlined />, '/manage-plant'),
+  getItem('Manage Farm Transaction', '5', <TeamOutlined />, '/manage-farm-transaction')
 ]
 const App = () => {
   useEffect(() => {
