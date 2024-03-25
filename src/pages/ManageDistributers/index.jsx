@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Space, Table, Input, Modal, Form, Popconfirm, Spin, notification, Tooltip } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, FallOutlined, RiseOutlined } from '@ant-design/icons'
 import useManageDistributers from './useManageDistributers'
-import { formatDateTime, titleCase } from '../../utils/helpers'
+import { formatDateTime, formatTextTable } from '../../utils/helpers'
 import DISTRIBUTER from '../../services/distributerService'
 
 const { Search } = Input
@@ -162,6 +162,24 @@ const ManageDistributerPage = () => {
 
   const handleDeleteDistributer = async ({ distributerId }) => {
     // Xử lý xóa distributer ở đây
+    setLoading(true)
+    try {
+      const res = await DISTRIBUTER.deleteDistributer({
+        distributerId
+      })
+
+      setLoading(false)
+      if (res.status === 200) {
+        openNotificationWithIcon('success', 'Thông báo', 'Xóa thành công')
+        refetch()
+      } else {
+        openNotificationWithIcon('error', 'Thông báo', 'Xóa thất bại')
+      }
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+      openNotificationWithIcon('error', 'Thông báo', 'Xóa thất bại')
+    }
   }
 
   const handleUpdateDistributer = async (values) => {
@@ -198,7 +216,13 @@ const ManageDistributerPage = () => {
     {
       title: 'ID',
       dataIndex: '_id',
-      key: '_id'
+      key: '_id',
+      render: (text) =>
+        formatTextTable({
+          str: text,
+          a: 8,
+          b: 5
+        })
     },
     {
       title: 'Tên',

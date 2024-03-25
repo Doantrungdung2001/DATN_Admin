@@ -1,3 +1,5 @@
+import { Tooltip } from 'antd'
+
 export const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
@@ -55,4 +57,30 @@ export function titleCase(str) {
     return splitStr.join(' ')
   }
   return ''
+}
+
+export function formatTextTable({ str, a, b }) {
+  if (!str) return str
+  if (a < 0 || b < 0 || a >= str.length || b >= str.length || a + b > str.length) {
+    return 'Invalid input'
+  }
+  const prefix = str.slice(0, a)
+  const suffix = str.slice(-b)
+  const formatedTextTable = prefix + '...' + suffix
+  return <Tooltip title={str}>{formatedTextTable}</Tooltip>
+}
+
+export function formatTransactionHashTable({ str, a, b }) {
+  if (!str) return str
+  if (a < 0 || b < 0 || a >= str.length || b >= str.length || a + b > str.length) {
+    return 'Invalid input'
+  }
+  const prefix = str.slice(0, a)
+  const suffix = str.slice(-b)
+  const formatedFormatTransactionHash = prefix + '...' + suffix
+  return (
+    <a href={`https://escan.live/tx/${str}`} target="_blank" rel="noreferrer">
+      <Tooltip title={str}>{formatedFormatTransactionHash}</Tooltip>
+    </a>
+  )
 }

@@ -1,11 +1,11 @@
 import publicHttp from './http/publicHttp.config'
 import privateHttp from './http/privateHttp.config'
 
-const DISTRIBUTER = {
-  getAllDistributer: async () => {
+const TRANSFER = {
+  getAllTransfer: async () => {
     return await publicHttp({
       method: 'GET',
-      url: `/distributer`
+      url: `transfer/`
     })
       .then((res) => {
         return res
@@ -15,10 +15,10 @@ const DISTRIBUTER = {
       })
   },
 
-  getDistributerByDistributerId: async (distributerId) => {
+  getTransferByTransferId: async ({ transferId }) => {
     return await publicHttp({
       method: 'GET',
-      url: `/distributer/${distributerId}`
+      url: `transfer/${transferId}`
     })
       .then((res) => {
         return res
@@ -28,10 +28,10 @@ const DISTRIBUTER = {
       })
   },
 
-  addDistributer: async ({ data }) => {
+  addTransfer: async ({ data }) => {
     return await privateHttp({
       method: 'POST',
-      url: `/distributer`,
+      url: `transfer`,
       data
     })
       .then((res) => {
@@ -42,10 +42,10 @@ const DISTRIBUTER = {
       })
   },
 
-  updateDistributer: async ({ distributerId, data }) => {
+  updateTransfer: async ({ data, transferId }) => {
     return await privateHttp({
       method: 'PATCH',
-      url: `/distributer/${distributerId}`,
+      url: `transfer/${transferId}`,
       data
     })
       .then((res) => {
@@ -56,10 +56,10 @@ const DISTRIBUTER = {
       })
   },
 
-  deleteDistributer: async ({ distributerId }) => {
+  deleteTransfer: async ({ transferId }) => {
     return await privateHttp({
       method: 'DELETE',
-      url: `/distributer/${distributerId}`
+      url: `transfer/${transferId}`
     })
       .then((res) => {
         return res
@@ -70,4 +70,4 @@ const DISTRIBUTER = {
   }
 }
 
-export default DISTRIBUTER
+export default TRANSFER

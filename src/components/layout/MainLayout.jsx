@@ -24,7 +24,10 @@ function getItem(label, key, icon, link) {
 const items = [
   getItem('Quản lý trang trại', '1', <DesktopOutlined />, '/manage-farms'),
   getItem('Quản lý nhà phân phối', '2', <TeamOutlined />, '/manage-distributers'),
-  getItem('Manage Plant', '3', <TeamOutlined />, '/manage-plant')
+  getItem('Quản lý người tiêu dùng', '3', <TeamOutlined />, '/manage-client'),
+  getItem('Quản lý cây', '4', <TeamOutlined />, '/manage-plant'),
+  getItem('Quản lý giao dịch', '5', <TeamOutlined />, '/manage-farm-transaction'),
+  getItem('Quản lý cấp tiền', '6', <TeamOutlined />, '/manage-farm-transfer')
 ]
 const App = () => {
   useEffect(() => {

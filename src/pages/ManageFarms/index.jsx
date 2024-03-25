@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Space, Table, Input, Modal, Form, Select, Popconfirm, Spin, Tooltip, notification } from 'antd'
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { Button, Space, Table, Input, Modal, Form, Popconfirm, Spin, Tooltip, notification } from 'antd'
+import { PlusOutlined, EditOutlined, DeleteOutlined, FallOutlined, RiseOutlined } from '@ant-design/icons'
 import useManageFarms from './useManageFarms'
-import { formatDateTime, titleCase } from '../../utils/helpers'
+import { formatDateTime, formatTextTable, titleCase } from '../../utils/helpers'
 import FARM from '../../services/farmService'
 
 const { Search } = Input
-const { Option } = Select
 
 const AddFarmModal = ({ visible, onCancel, onAdd }) => {
   const [form] = Form.useForm()
@@ -81,9 +80,54 @@ const AddFarmModal = ({ visible, onCancel, onAdd }) => {
   )
 }
 
+const UpdateWalletAddressModal = ({ visible, onCancel, onUpdate, farm }) => {
+  const [form] = Form.useForm()
+  form.setFieldsValue({
+    walletAddress: farm?.walletAddress
+  })
+  return (
+    <Modal
+      open={visible}
+      title="Cập nhật Địa chỉ ví"
+      okText="Cập nhật"
+      cancelText="Hủy"
+      onCancel={() => {
+        form.resetFields()
+        onCancel()
+      }}
+      onOk={() => {
+        form
+          .validateFields()
+          .then((values) => {
+            onUpdate(values)
+            form.resetFields()
+          })
+          .catch((info) => {
+            console.log('Validate Failed:', info)
+          })
+      }}
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        name="form_in_modal"
+        initialValues={{
+          walletAddress: farm?.walletAddress
+        }}
+      >
+        <Form.Item name="walletAddress" label="Địa chỉ ví">
+          <Input />
+        </Form.Item>
+      </Form>
+    </Modal>
+  )
+}
+
 const ManageFarmPage = () => {
   const [searchText, setSearchText] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
+  const [modalUpdateVisible, setModalUpdateVisible] = useState(false)
+  const [selectedFarm, setSelectedFarm] = useState(null)
   const [loading, setLoading] = useState(false)
   const [api, contextHolder] = notification.useNotification()
   const openNotificationWithIcon = (type, title, content) => {
@@ -153,6 +197,29 @@ const ManageFarmPage = () => {
     }
   }
 
+  const handleUpdateWalletAddress = async ({ farmId, walletAddress }) => {
+    setLoading(true)
+    try {
+      const res = await FARM.updateWalletAddress({
+        farmId,
+        data: {
+          walletAddress
+        }
+      })
+      setLoading(false)
+      if (res.status === 200) {
+        openNotificationWithIcon('success', 'Thông báo', 'Cập nhật thành công')
+        refetch()
+      } else {
+        openNotificationWithIcon('error', 'Thông báo', 'Cập nhật thất bại')
+      }
+    } catch (error) {
+      openNotificationWithIcon('error', 'Thông báo', 'Cập nhật thất bại')
+      setLoading(false)
+      console.log(error)
+    }
+  }
+
   const handleDeleteFarm = async ({ farmId }) => {
     console.log('Farm ID:', farmId)
     // Gọi API hoặc xử lý xóa ở đây
@@ -163,7 +230,24 @@ const ManageFarmPage = () => {
       title: 'ID',
       dataIndex: '_id',
       key: '_id',
-      sorter: (a, b) => a._id - b._id
+      sorter: (a, b) => a._id - b._id,
+      render: (text) =>
+        formatTextTable({
+          str: text,
+          a: 8,
+          b: 5
+        })
+    },
+    {
+      title: 'Địa chỉ ví',
+      dataIndex: 'walletAddress',
+      key: 'walletAddress',
+      render: (text) =>
+        formatTextTable({
+          str: text,
+          a: 8,
+          b: 5
+        })
     },
     {
       title: 'Tên',
@@ -218,9 +302,9 @@ const ManageFarmPage = () => {
             cancelText="Không"
             key="update-status"
           >
-            <span>
+            <span onClick={(e) => e.stopPropagation()}>
               <Tooltip title="Cập nhật trạng thái">
-                <EditOutlined />
+                {record.status === 'active' ? <FallOutlined /> : <RiseOutlined />}
               </Tooltip>
             </span>
           </Popconfirm>
@@ -242,6 +326,15 @@ const ManageFarmPage = () => {
               <DeleteOutlined />
             </Tooltip>
           </Popconfirm>
+          <Tooltip
+            title="Chỉnh sửa Địa chỉ ví"
+            onClick={() => {
+              setSelectedFarm(record)
+              setModalUpdateVisible(true)
+            }}
+          >
+            <EditOutlined />
+          </Tooltip>
         </Space>
       )
     }
@@ -255,7 +348,7 @@ const ManageFarmPage = () => {
           <h1>Danh sách các trang trại</h1>
           <div style={{ marginBottom: 16 }}>
             <Search
-              placeholder="Tìm kiếm theo ID, Tên, Email, Địa chỉ"
+              placeholder="Tìm kiếm theo ID, Địa chỉ ví, Tên, Email, Địa chỉ"
               allowClear
               enterButton
               onSearch={handleSearch}
@@ -275,7 +368,8 @@ const ManageFarmPage = () => {
                 farm.name?.toLowerCase().includes(searchText?.toLowerCase()) ||
                 farm.email?.toLowerCase().includes(searchText?.toLowerCase()) ||
                 farm._id?.toLowerCase().includes(searchText?.toLowerCase()) ||
-                farm.address?.toLowerCase().includes(searchText?.toLowerCase())
+                farm.address?.toLowerCase().includes(searchText?.toLowerCase()) ||
+                farm.walletAddress?.toLowerCase().includes(searchText?.toLowerCase())
             )} // Added closing parenthesis here
             rowKey="id"
             pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '50'] }}
@@ -290,6 +384,16 @@ const ManageFarmPage = () => {
               handleAddFarm(values)
               setModalVisible(false)
             }}
+          />
+          <UpdateWalletAddressModal
+            visible={modalUpdateVisible}
+            onCancel={() => setModalUpdateVisible(false)}
+            onUpdate={(values) => {
+              console.log('Updated Địa chỉ ví:', values)
+              handleUpdateWalletAddress({ farmId: selectedFarm._id, walletAddress: values.walletAddress || '' })
+              setModalUpdateVisible(false)
+            }}
+            farm={selectedFarm}
           />
         </div>
       )}
