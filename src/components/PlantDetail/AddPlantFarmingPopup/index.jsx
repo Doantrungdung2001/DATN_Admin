@@ -393,22 +393,26 @@ const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming,
     {
       key: '1',
       label: 'Thời gian gieo trồng',
-      children: <TimeItem />
+      children: <TimeItem />,
+      forceRender: true
     },
     {
       key: '2',
       label: 'Làm đất và gieo trồng',
-      children: <CultivationItem />
+      children: <CultivationItem />,
+      forceRender: true
     },
     {
       key: '3',
       label: 'Bón phân',
-      children: <FertilizeItem />
+      children: <FertilizeItem />,
+      forceRender: true
     },
     {
       key: '4',
       label: 'Kiểm soát sâu bệnh',
-      children: <PesticideItem />
+      children: <PesticideItem />,
+      forceRender: true
     }
   ]
 
