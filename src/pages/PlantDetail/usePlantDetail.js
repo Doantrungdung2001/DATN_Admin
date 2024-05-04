@@ -12,14 +12,10 @@ export default function usePlantDetail({ plantId, seedId, isDefaultPlantFarming 
       image: plan.seed.seed_thumb,
       seedId: plan.seed._id,
       isSeedDefault: plan.seed.isSeedDefault,
-      timeCultivates: plan.timeCultivates,
       cultivationActivities: plan.cultivationActivities,
       plantingActivity: plan.plantingActivity,
       fertilizationActivities: plan.fertilizationActivities,
       pestAndDiseaseControlActivities: plan.pestAndDiseaseControlActivities,
-      bestTimeCultivate: plan.bestTimeCultivate,
-      farmingTime: plan.farmingTime,
-      harvestTime: plan.harvestTime
     }))
     return { plans }
   }, [])
