@@ -191,29 +191,26 @@ const PlantingItem = () => {
   return (
     <Space direction="vertical" style={{ width: '100%', margin: '8px', borderRadius: '8px', padding: '12px' }}>
       <h2 style={{ marginTop: '10px' }}>Hoạt động gieo trồng</h2>
-      <Form.Item name="plantingActivity" style={{ marginRight: '16px' }}>
-        <Space
-          direction="vertical"
-          style={{
-            width: '100%',
-            backgroundColor: '#e9f0ea',
-            borderRadius: '8px',
-            padding: '16px',
-            paddingRight: '0px'
-          }}
-        >
-          <Form.Item name={['plantingActivity', 'density']} label={<strong>Mật độ</strong>} style={{ width: '100%' }}>
-            <Input placeholder="Mật độ" style={{ width: '54rem', float: 'right' }} />
-          </Form.Item>
-          <Form.Item
-            name={['plantingActivity', 'description']}
-            label={<strong>Mô tả</strong>}
-            style={{ width: '100%' }}
-          >
-            <Input.TextArea placeholder="Mô tả" style={{ width: '54rem', float: 'right' }} autoSize={{ minRows: 5 }} />
+      <Space direction="vertical" style={{ width: '100%' }}>
+        <Space direction="vertical" style={{ width: '100%', backgroundColor: '#e9f0ea', borderRadius: '8px' }}>
+          <Form.Item name="plantingActivity" style={{ marginRight: '16px' }}>
+            <Form.Item name={['plantingActivity', 'density']} label={<strong>Mật độ</strong>} style={{ width: '100%' }}>
+              <Input placeholder="Mật độ" style={{ width: '54rem', float: 'right' }} />
+            </Form.Item>
+            <Form.Item
+              name={['plantingActivity', 'description']}
+              label={<strong>Mô tả</strong>}
+              style={{ width: '100%' }}
+            >
+              <Input.TextArea
+                placeholder="Mô tả"
+                style={{ width: '54rem', float: 'right' }}
+                autoSize={{ minRows: 5 }}
+              />
+            </Form.Item>
           </Form.Item>
         </Space>
-      </Form.Item>
+      </Space>
     </Space>
   )
 }
