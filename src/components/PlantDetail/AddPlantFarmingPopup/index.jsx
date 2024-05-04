@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, InputNumber, Input, Space, Form, Button, Select, Divider, Tabs } from 'antd'
+import { Modal, InputNumber, Input, Space, Form, Button, Select, Divider, Tabs, Spin } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
 
 const PesticideItem = () => {
@@ -187,13 +187,13 @@ const CultivationItem = () => {
   )
 }
 
-const PlantingItem = () => {
+const PlantingActivity = () => {
   return (
     <Space direction="vertical" style={{ width: '100%', margin: '8px', borderRadius: '8px', padding: '12px' }}>
       <h2 style={{ marginTop: '10px' }}>Hoạt động gieo trồng</h2>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Space direction="vertical" style={{ width: '100%', backgroundColor: '#e9f0ea', borderRadius: '8px' }}>
-          <Form.Item name="plantingActivity" style={{ marginRight: '16px' }}>
+          <Form.Item name="plantingActivity" style={{ marginRight: '16px',  padding: '8px' }}>
             <Form.Item name={['plantingActivity', 'density']} label={<strong>Mật độ</strong>} style={{ width: '100%' }}>
               <Input placeholder="Mật độ" style={{ width: '54rem', float: 'right' }} />
             </Form.Item>
@@ -285,18 +285,21 @@ const FertilizeItem = () => {
 const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming, isUpdate }) => {
   const [form] = Form.useForm()
   isUpdate ? form.setFieldsValue(recommendPlantFarming) : form.setFieldsValue({})
+  console.log('recommendPlantFarming', recommendPlantFarming, isUpdate)
+
+  const [loading, setLoading] = React.useState(false)
 
   const items = [
     {
       key: '1',
-      label: 'Gieo trồng',
-      children: <PlantingItem />,
+      label: 'Hoạt động làm đất',
+      children: <CultivationItem />,
       forceRender: true
     },
     {
       key: '2',
-      label: 'Làm đất và gieo trồng',
-      children: <CultivationItem />,
+      label: 'Hoạt động gieo trồng',
+      children: <PlantingActivity />,
       forceRender: true
     },
     {
@@ -328,17 +331,22 @@ const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming,
         form
           .validateFields()
           .then((values) => {
+            console.log('values', values)
             form.setFieldsValue(values)
+            setLoading(true)
             onCreate(values)
+            setLoading(false)
           })
           .catch((error) => {
             console.log('Validation failed:', error)
           })
       }}
     >
-      <Form form={form} name="dynamic_form_complex" initialValues={recommendPlantFarming}>
-        <Tabs defaultActiveKey="1" items={items} />;
-      </Form>
+      <Spin spinning={loading}>
+        <Form form={form} name="dynamic_form_complex" initialValues={recommendPlantFarming}>
+          <Tabs defaultActiveKey="1" items={items} />
+        </Form>
+      </Spin>
     </Modal>
   )
 }
