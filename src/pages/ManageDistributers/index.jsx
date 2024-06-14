@@ -4,6 +4,7 @@ import { PlusOutlined, EditOutlined, DeleteOutlined, FallOutlined, RiseOutlined 
 import useManageDistributers from './useManageDistributers'
 import { formatDateTime, formatTextTable } from '../../utils/helpers'
 import DISTRIBUTER from '../../services/distributerService'
+import Loading from '../Loading'
 
 const { Search } = Input
 
@@ -298,7 +299,7 @@ const ManageDistributerPage = () => {
             </Tooltip>
           </Popconfirm>
           <Tooltip
-            title="Edit"
+            title="Chỉnh sửa thông tin"
             onClick={() => {
               setSelectedDistributer(record)
               setModalUpdateVisible(true)
@@ -315,54 +316,55 @@ const ManageDistributerPage = () => {
     <>
       {contextHolder}
       {isSuccess && (
-        <div>
-          <h1>Danh sách các nhà phân phối</h1>
-          <div style={{ marginBottom: 16 }}>
-            <Search
-              placeholder="Tìm kiếm theo ID, Tên, Email, Địa chỉ"
-              allowClear
-              enterButton
-              onSearch={handleSearch}
-              style={{ width: 400 }}
-              onChange={(e) => setSearchText(e.target.value)}
+        <Spin spinning={loading} size="large">
+          <div>
+            <h1>Danh sách các nhà phân phối</h1>
+            <div style={{ marginBottom: 16 }}>
+              <Search
+                placeholder="Tìm kiếm theo ID, Tên, Email, Địa chỉ"
+                allowClear
+                enterButton
+                onSearch={handleSearch}
+                style={{ width: 400 }}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
+                Thêm mới
+              </Button>
+            </div>
+            <Table
+              columns={columns}
+              dataSource={allDistributers.filter((distributer) => {
+                return (
+                  distributer.name?.toLowerCase().includes(searchText.toLowerCase()) ||
+                  distributer.email?.toLowerCase().includes(searchText.toLowerCase()) ||
+                  distributer.address?.toLowerCase().includes(searchText.toLowerCase()) ||
+                  distributer._id?.toLowerCase().includes(searchText.toLowerCase())
+                )
+              })}
+              rowKey="id"
+              pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '50'] }}
+            />
+            <AddDistributerModal
+              visible={modalVisible}
+              onCancel={() => setModalVisible(false)}
+              onAdd={handleAddDistributer}
+              selectedOutput={null}
+              isUpdate={false}
+            />
+            <AddDistributerModal
+              visible={modalUpdateVisible}
+              onCancel={() => setModalUpdateVisible(false)}
+              onAdd={handleUpdateDistributer}
+              selectedOutput={selectedDistributer}
+              isUpdate={true}
             />
           </div>
-          <div style={{ marginBottom: 16 }}>
-            <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
-              Thêm mới
-            </Button>
-          </div>
-          <Table
-            columns={columns}
-            dataSource={allDistributers.filter((distributer) => {
-              return (
-                distributer.name?.toLowerCase().includes(searchText.toLowerCase()) ||
-                distributer.email?.toLowerCase().includes(searchText.toLowerCase()) ||
-                distributer.address?.toLowerCase().includes(searchText.toLowerCase()) ||
-                distributer._id?.toLowerCase().includes(searchText.toLowerCase())
-              )
-            })}
-            rowKey="id"
-            pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '50'] }}
-            loading={loading}
-          />
-          <AddDistributerModal
-            visible={modalVisible}
-            onCancel={() => setModalVisible(false)}
-            onAdd={handleAddDistributer}
-            selectedOutput={null}
-            isUpdate={false}
-          />
-          <AddDistributerModal
-            visible={modalUpdateVisible}
-            onCancel={() => setModalUpdateVisible(false)}
-            onAdd={handleUpdateDistributer}
-            selectedOutput={selectedDistributer}
-            isUpdate={true}
-          />
-        </div>
+        </Spin>
       )}
-      {isLoading && <Spin size="large" />}
+      {isLoading && <Loading />}
     </>
   )
 }

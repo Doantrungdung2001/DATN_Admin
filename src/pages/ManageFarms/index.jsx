@@ -4,6 +4,7 @@ import { PlusOutlined, EditOutlined, DeleteOutlined, FallOutlined, RiseOutlined 
 import useManageFarms from './useManageFarms'
 import { formatDateTime, formatTextTable, titleCase } from '../../utils/helpers'
 import FARM from '../../services/farmService'
+import Loading from '../Loading'
 
 const { Search } = Input
 
@@ -344,60 +345,61 @@ const ManageFarmPage = () => {
     <>
       {contextHolder}
       {isSuccess && (
-        <div>
-          <h1>Danh sách các trang trại</h1>
-          <div style={{ marginBottom: 16 }}>
-            <Search
-              placeholder="Tìm kiếm theo ID, Địa chỉ ví, Tên, Email, Địa chỉ"
-              allowClear
-              enterButton
-              onSearch={handleSearch}
-              style={{ width: 400 }}
-              onChange={(e) => setSearchText(e.target.value)}
+        <Spin spinning={loading} size="large">
+          <div>
+            <h1>Danh sách các trang trại</h1>
+            <div style={{ marginBottom: 16 }}>
+              <Search
+                placeholder="Tìm kiếm theo ID, Địa chỉ ví, Tên, Email, Địa chỉ"
+                allowClear
+                enterButton
+                onSearch={handleSearch}
+                style={{ width: 400 }}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
+                Thêm mới
+              </Button>
+            </div>
+            <Table
+              columns={columns}
+              dataSource={allFarms?.filter(
+                (farm) =>
+                  farm.name?.toLowerCase().includes(searchText?.toLowerCase()) ||
+                  farm.email?.toLowerCase().includes(searchText?.toLowerCase()) ||
+                  farm._id?.toLowerCase().includes(searchText?.toLowerCase()) ||
+                  farm.address?.toLowerCase().includes(searchText?.toLowerCase()) ||
+                  farm.walletAddress?.toLowerCase().includes(searchText?.toLowerCase())
+              )} // Added closing parenthesis here
+              rowKey="id"
+              pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '50'] }}
+            />
+
+            <AddFarmModal
+              visible={modalVisible}
+              onCancel={() => setModalVisible(false)}
+              onAdd={(values) => {
+                console.log('Added farm:', values)
+                handleAddFarm(values)
+                setModalVisible(false)
+              }}
+            />
+            <UpdateWalletAddressModal
+              visible={modalUpdateVisible}
+              onCancel={() => setModalUpdateVisible(false)}
+              onUpdate={(values) => {
+                console.log('Updated Địa chỉ ví:', values)
+                handleUpdateWalletAddress({ farmId: selectedFarm._id, walletAddress: values.walletAddress || '' })
+                setModalUpdateVisible(false)
+              }}
+              farm={selectedFarm}
             />
           </div>
-          <div style={{ marginBottom: 16 }}>
-            <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
-              Thêm mới
-            </Button>
-          </div>
-          <Table
-            columns={columns}
-            dataSource={allFarms?.filter(
-              (farm) =>
-                farm.name?.toLowerCase().includes(searchText?.toLowerCase()) ||
-                farm.email?.toLowerCase().includes(searchText?.toLowerCase()) ||
-                farm._id?.toLowerCase().includes(searchText?.toLowerCase()) ||
-                farm.address?.toLowerCase().includes(searchText?.toLowerCase()) ||
-                farm.walletAddress?.toLowerCase().includes(searchText?.toLowerCase())
-            )} // Added closing parenthesis here
-            rowKey="id"
-            pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '50'] }}
-            loading={loading}
-          />
-
-          <AddFarmModal
-            visible={modalVisible}
-            onCancel={() => setModalVisible(false)}
-            onAdd={(values) => {
-              console.log('Added farm:', values)
-              handleAddFarm(values)
-              setModalVisible(false)
-            }}
-          />
-          <UpdateWalletAddressModal
-            visible={modalUpdateVisible}
-            onCancel={() => setModalUpdateVisible(false)}
-            onUpdate={(values) => {
-              console.log('Updated Địa chỉ ví:', values)
-              handleUpdateWalletAddress({ farmId: selectedFarm._id, walletAddress: values.walletAddress || '' })
-              setModalUpdateVisible(false)
-            }}
-            farm={selectedFarm}
-          />
-        </div>
+        </Spin>
       )}
-      {isLoading && <Spin size="large" />}
+      {isLoading && <Loading />}
     </>
   )
 }

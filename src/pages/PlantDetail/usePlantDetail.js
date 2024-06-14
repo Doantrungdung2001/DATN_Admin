@@ -15,7 +15,7 @@ export default function usePlantDetail({ plantId, seedId, isDefaultPlantFarming 
       cultivationActivities: plan.cultivationActivities,
       plantingActivity: plan.plantingActivity,
       fertilizationActivities: plan.fertilizationActivities,
-      pestAndDiseaseControlActivities: plan.pestAndDiseaseControlActivities,
+      pestAndDiseaseControlActivities: plan.pestAndDiseaseControlActivities
     }))
     return { plans }
   }, [])

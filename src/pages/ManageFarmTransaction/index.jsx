@@ -3,6 +3,7 @@ import { Table, Spin } from 'antd'
 import useManageEvents from './useManageFarmTransaction'
 import Search from 'antd/es/input/Search'
 import { formatDateTime, formatTextTable, formatTransactionHashTable } from '../../utils/helpers'
+import Loading from '../Loading'
 
 const ManageFarmTransaction = () => {
   const [searchText, setSearchText] = useState('')
@@ -91,7 +92,7 @@ const ManageFarmTransaction = () => {
           )}
         />
       )}
-      {isLoading && <Spin />}
+      {isLoading && <Loading />}
     </div>
   )
 }

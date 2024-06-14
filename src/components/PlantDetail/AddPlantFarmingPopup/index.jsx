@@ -1,20 +1,22 @@
 import React from 'react'
-import { Modal, InputNumber, Input, Space, Form, Button, Select, Divider, Tabs, Spin } from 'antd'
+import { Modal, Input, Space, Form, Button, Select, Divider, Tabs, Spin } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
 
 const PesticideItem = () => {
   return (
-    <Space direction="vertical" style={{ width: '100%', margin: '8px', borderRadius: '8px', padding: '12px' }}>
+    <Space direction="vertical" style={{ width: '100%' }}>
       <h2 style={{ marginTop: '0' }}>Danh sách các hoạt động kiểm soát, phòng ngừa</h2>
       <Space direction="vertical" style={{ width: '100%' }}>
-        <Space direction="vertical" style={{ width: '100%', backgroundColor: '#e9f0ea', borderRadius: '8px' }}>
+        <Space direction="vertical" style={{ width: '100%' }}>
           <Form.List name="pestAndDiseaseControlActivities">
             {(fields, { add, remove }) => (
               <>
                 {fields.map((field, index) => (
                   <div key={`pestAndDiseaseControlActivities_${index}`}>
-                    <div style={{ display: 'flex' }}>
-                      <Space direction="vertical" style={{ width: '100%', marginTop: '8px', padding: '8px' }}>
+                    <div
+                      style={{ display: 'flex', backgroundColor: '#effdee', borderRadius: '8px', padding: '8px 16px' }}
+                    >
+                      <Space direction="vertical" style={{ width: '100%', marginTop: '8px' }}>
                         <CloseOutlined style={{ float: 'right' }} onClick={() => remove(field.name)} />
                         <Form.Item
                           fieldKey={[field.key, 'name']}
@@ -63,7 +65,6 @@ const PesticideItem = () => {
                           fieldKey={[field.key, 'solution']}
                           name={[field.name, 'solution']}
                           label={<strong>Giải pháp</strong>}
-                          style={{ width: '100%' }}
                         >
                           <Form.List name={[field.name, 'solution']}>
                             {(subFields, { add: addSolution, remove: removeSolution }) => (
@@ -78,26 +79,29 @@ const PesticideItem = () => {
                                       alignItems: 'flex-end'
                                     }}
                                   >
-                                    <CloseOutlined
-                                      style={{ float: 'right' }}
-                                      onClick={() => removeSolution(subField.name)}
-                                    />
-                                    <Form.Item fieldKey={[subField.key, 'solution']} name={[subField.name]} noStyle>
-                                      <Input.TextArea
-                                        placeholder="Giải pháp"
-                                        style={{ width: '50rem', float: 'right' }}
-                                        autoSize={{ minRows: 5 }}
+                                    <div style={{ display: 'flex', marginBottom: '16px' }}>
+                                      <Form.Item fieldKey={[subField.key, 'solution']} name={[subField.name]} noStyle>
+                                        <Input.TextArea
+                                          placeholder="Giải pháp"
+                                          style={{ width: '49rem', float: 'right', marginRight: '5px' }}
+                                          autoSize={{ minRows: 5 }}
+                                        />
+                                      </Form.Item>
+                                      <CloseOutlined
+                                        style={{ float: 'right' }}
+                                        onClick={() => removeSolution(subField.name)}
                                       />
-                                    </Form.Item>
+                                    </div>
                                   </div>
                                 ))}
                                 <Button
                                   style={{
-                                    width: '100%',
+                                    width: '49rem',
                                     float: 'right',
                                     backgroundColor: '#92a697',
                                     color: '#ffffff',
-                                    marginTop: '16px'
+                                    marginTop: '16px',
+                                    marginLeft: '57px'
                                   }}
                                   type="dashed"
                                   onClick={() => addSolution()}
@@ -120,7 +124,7 @@ const PesticideItem = () => {
                   onClick={() => add()}
                   block
                 >
-                  + Thêm thông tin
+                  + Thêm họat động
                 </Button>
               </>
             )}
@@ -133,18 +137,18 @@ const PesticideItem = () => {
 
 const CultivationItem = () => {
   return (
-    <Space direction="vertical" style={{ width: '100%', margin: '8px', borderRadius: '8px', padding: '12px' }}>
-      <h2 style={{ marginTop: '0' }}>Hoạt động làm đất</h2>
+    <Space direction="vertical" style={{ width: '100%' }}>
+      <h2 style={{ marginTop: '0' }}>Danh sách các hoạt động làm đất</h2>
       <Space direction="vertical" style={{ width: '100%' }}>
-        <Space direction="vertical" style={{ width: '100%', backgroundColor: '#e9f0ea', borderRadius: '8px' }}>
+        <Space direction="vertical" style={{ width: '100%' }}>
           <Form.List name="cultivationActivities">
             {(fields, { add, remove }) => (
               <>
                 {fields.map((field, index) => (
                   <div key={`cultivationActivities_${index}`}>
-                    <div style={{ margin: '16px' }}>
-                      <CloseOutlined style={{ float: 'right' }} onClick={() => remove(field.name)} />
-                      <Space direction="vertical" style={{ width: '100%', marginTop: '8px', padding: '8px' }}>
+                    <div style={{ display: 'flex', backgroundColor: '#effdee', borderRadius: '8px' }}>
+                      <Space direction="vertical" style={{ width: '100%', marginTop: '8px', padding: '8px 16px' }}>
+                        <CloseOutlined style={{ float: 'right' }} onClick={() => remove(field.name)} />
                         <Form.Item
                           fieldKey={[field.key, 'name']}
                           name={[field.name, 'name']}
@@ -166,8 +170,8 @@ const CultivationItem = () => {
                           />
                         </Form.Item>
                       </Space>
-                      <Divider />
                     </div>
+                    <Divider />
                   </div>
                 ))}
                 <Button
@@ -176,7 +180,7 @@ const CultivationItem = () => {
                   onClick={() => add()}
                   block
                 >
-                  + Thêm thông tin
+                  <strong>+ Thêm họat động</strong>
                 </Button>
               </>
             )}
@@ -189,24 +193,20 @@ const CultivationItem = () => {
 
 const PlantingActivity = () => {
   return (
-    <Space direction="vertical" style={{ width: '100%', margin: '8px', borderRadius: '8px', padding: '12px' }}>
-      <h2 style={{ marginTop: '10px' }}>Hoạt động gieo trồng</h2>
+    <Space direction="vertical" style={{ width: '100%' }}>
+      <h2 style={{ marginTop: '0' }}>Hoạt động gieo trồng</h2>
       <Space direction="vertical" style={{ width: '100%' }}>
-        <Space direction="vertical" style={{ width: '100%', backgroundColor: '#e9f0ea', borderRadius: '8px' }}>
-          <Form.Item name="plantingActivity" style={{ marginRight: '16px',  padding: '8px' }}>
+        <Space direction="vertical" style={{ width: '100%', backgroundColor: '#effdee', borderRadius: '8px' }}>
+          <Form.Item name="plantingActivity" style={{ marginRight: '16px', padding: '16px' }}>
             <Form.Item name={['plantingActivity', 'density']} label={<strong>Mật độ</strong>} style={{ width: '100%' }}>
-              <Input placeholder="Mật độ" style={{ width: '54rem', float: 'right' }} />
+              <Input placeholder="Mật độ" style={{ width: '99%', float: 'right' }} />
             </Form.Item>
             <Form.Item
               name={['plantingActivity', 'description']}
               label={<strong>Mô tả</strong>}
               style={{ width: '100%' }}
             >
-              <Input.TextArea
-                placeholder="Mô tả"
-                style={{ width: '54rem', float: 'right' }}
-                autoSize={{ minRows: 5 }}
-              />
+              <Input.TextArea placeholder="Mô tả" style={{ width: '100%', float: 'right' }} autoSize={{ minRows: 5 }} />
             </Form.Item>
           </Form.Item>
         </Space>
@@ -217,17 +217,17 @@ const PlantingActivity = () => {
 
 const FertilizeItem = () => {
   return (
-    <Space direction="vertical" style={{ width: '100%', margin: '8px', borderRadius: '8px', padding: '12px' }}>
+    <Space direction="vertical" style={{ width: '100%' }}>
       <h2 style={{ marginTop: '0' }}>Danh sách các hoạt động bón phân</h2>
       <Space direction="vertical" style={{ width: '100%' }}>
-        <Space direction="vertical" style={{ width: '100%', backgroundColor: '#e9f0ea', borderRadius: '8px' }}>
+        <Space direction="vertical" style={{ width: '100%' }}>
           <Form.List name="fertilizationActivities">
             {(fields, { add, remove }) => (
               <>
                 {fields.map((field, index) => (
                   <div key={`fertilizationActivities_${index}`}>
-                    <div style={{ display: 'flex' }}>
-                      <Space direction="vertical" style={{ width: '100%', marginTop: '8px', padding: '8px' }}>
+                    <div style={{ display: 'flex', backgroundColor: '#effdee', borderRadius: '8px' }}>
+                      <Space direction="vertical" style={{ width: '100%', marginTop: '8px', padding: '8px 16px' }}>
                         <CloseOutlined style={{ float: 'right' }} onClick={() => remove(field.name)} />
                         <Form.Item
                           fieldKey={[field.key, 'fertilizationTime']}
@@ -271,7 +271,7 @@ const FertilizeItem = () => {
                   onClick={() => add()}
                   block
                 >
-                  + Thêm thông tin
+                  + Thêm họat động
                 </Button>
               </>
             )}
@@ -342,7 +342,7 @@ const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming,
           })
       }}
     >
-      <Spin spinning={loading}>
+      <Spin spinning={loading} size="large">
         <Form form={form} name="dynamic_form_complex" initialValues={recommendPlantFarming}>
           <Tabs defaultActiveKey="1" items={items} />
         </Form>

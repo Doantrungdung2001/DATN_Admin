@@ -36,3 +36,79 @@
     transform: rotate(360deg);
   }
 }
+
+.ant-card-head {
+  background: #8fb955 !important;
+  color: #fff !important;
+}
+
+.styleText {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(231 228 221);
+}
+
+.ant-card-body {
+  /* text-align: end !important; */
+  background-color: #effdee !important;
+}
+
+.ant-btn-primary {
+  background-color: rgb(8, 160, 69) !important;
+}
+
+.ant-layout .ant-layout-sider {
+  background: #022813 !important;
+}
+
+.ant-layout .ant-layout-sider-trigger {
+  background: #022813 !important;
+}
+
+.ant-menu-dark {
+  background: #022813 !important;
+}
+
+.ant-menu-dark .ant-menu-item-selected {
+  background: #32cd32 !important;
+}
+
+.ant-typography .ant-typography-expand {
+  color: #08a045 !important;
+}
+
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #08a045 !important;
+}
+
+.ant-tabs .ant-tabs-tab:hover {
+  color: #08a045 !important;
+}
+
+.ant-tabs .ant-tabs-ink-bar {
+  background: #08a045 !important;
+}
+
+a {
+  color: #08a045 !important;
+}
+
+.ant-pagination .ant-pagination-item-active {
+  color: #08a045 !important;
+  border-color: #08a045 !important;
+}
+
+.ant-input-search .ant-input:hover {
+  border-color: #08a045 !important;
+}
+
+.ant-spin-dot-item {
+  background-color: #022813 !important;
+}
+
+.ant-spin-text {
+  color: #022813 !important;
+  font-weight: bold !important;
+  font-size: 25px !important;
+}
