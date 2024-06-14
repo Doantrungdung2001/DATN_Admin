@@ -164,11 +164,13 @@ const ManagePlant = () => {
           <div>
             <h1>Danh sách các cây</h1>
             <Row>
-              <Col span={8}>
+              <Col span={8} style={{marginRight: '2rem'}}>
                 <Search
                   placeholder="Tìm kiếm cây theo tên"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  allowClear
+                  enterButton
                   style={{ marginBottom: '30px' }}
                 />
               </Col>

@@ -47,9 +47,9 @@
   text-align: left;
 }
 
-#login-form .ant-input-affix-wrapper {
+/* #login-form .ant-input-affix-wrapper {
   padding: 12px 15px;
-}
+} */
 
 #login-form_username {
   height: 48px;
