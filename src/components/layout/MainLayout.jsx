@@ -26,8 +26,8 @@ const items = [
   getItem('Quản lý nhà phân phối', '2', <TeamOutlined />, '/manage-distributers'),
   getItem('Quản lý người tiêu dùng', '3', <TeamOutlined />, '/manage-client'),
   getItem('Quản lý cây', '4', <TeamOutlined />, '/manage-plant'),
-  getItem('Quản lý giao dịch', '5', <TeamOutlined />, '/manage-farm-transaction'),
-  getItem('Quản lý cấp tiền', '6', <TeamOutlined />, '/manage-farm-transfer')
+  getItem('Quản lý giao dịch', '5', <TeamOutlined />, '/manage-farm-transaction')
+  // getItem('Quản lý cấp tiền', '6', <TeamOutlined />, '/manage-farm-transfer')
 ]
 const App = () => {
   useEffect(() => {
@@ -95,7 +95,12 @@ const App = () => {
             }}
             key="8"
           >
-            <Popconfirm title="Bạn có chắc chắn muốn đăng xuất?" onConfirm={handleLogout} okText="Yes" cancelText="No">
+            <Popconfirm
+              title="Bạn có chắc chắn muốn đăng xuất?"
+              onConfirm={handleLogout}
+              okText="Có"
+              cancelText="Không"
+            >
               <LogoutOutlined />
               <span>Đăng xuất</span>
             </Popconfirm>

@@ -19,6 +19,7 @@ import useManageTransfer from './useManageTransfer'
 import { formatDateTime, formatTextTable, formatTransactionHashTable } from '../../utils/helpers'
 import TRANSFER from '../../services/transferService'
 import dayjs from 'dayjs'
+import Loading from '../Loading'
 
 const { Search } = Input
 
@@ -276,7 +277,7 @@ const ManageTransferPage = () => {
             </Tooltip>
           </Popconfirm>
           <Tooltip
-            title="Edit"
+            title="Chỉnh sửa thông tin"
             onClick={() => {
               setSelectedTransfer(record)
               setModalUpdateVisible(true)
@@ -341,7 +342,7 @@ const ManageTransferPage = () => {
           />
         </div>
       )}
-      {(isLoading || isLoadingFarm) && <Spin size="large" />}
+      {(isLoading || isLoadingFarm) && <Loading />}
     </>
   )
 }

@@ -1,8 +1,8 @@
 import React from 'react'
-import { Space, Spin } from 'antd'
+import { Spin } from 'antd'
 const Loading = () => (
-  <Space size="middle">
-    <Spin size="large" />
-  </Space>
+  <Spin spinning={true} tip="Đang tải dữ liệu" size="large" style={{ marginTop: '100px' }}>
+    <div></div>
+  </Spin>
 )
 export default Loading

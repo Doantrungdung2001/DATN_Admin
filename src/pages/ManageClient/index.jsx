@@ -4,6 +4,7 @@ import { DeleteOutlined, FallOutlined, RiseOutlined } from '@ant-design/icons'
 import { formatDateTime, formatTextTable } from '../../utils/helpers'
 import useManageClient from './useManageClient'
 import CLIENT from '../../services/clientService'
+import Loading from '../Loading'
 
 const { Search } = Input
 
@@ -164,7 +165,7 @@ const ManageClient = () => {
       {contextHolder}
       {isSuccess && (
         <div>
-          <h1>Danh sách các khách hàng</h1>
+          <h1>Danh sách các người tiêu dùng</h1>
           <div style={{ marginBottom: 16 }}>
             <Search
               placeholder="Tìm kiếm theo ID, Tên, SDT, Địa chỉ"
@@ -191,7 +192,7 @@ const ManageClient = () => {
           />
         </div>
       )}
-      {isLoading && <Spin size="large" />}
+      {isLoading && <Loading />}
     </>
   )
 }

@@ -22,17 +22,13 @@ const PlantDetail = () => {
   const [openSeed, setOpenSeed] = useState(false)
   const [openPlantFarming, setOpenPlantFarming] = useState(false)
   const [isDefaultPlantFarming, setIsDefaultPlantFarming] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const { plans, isSuccessPlans, refetchPlans, currentPlant, isSuccessCurrentPlant } = usePlantDetail({
     plantId,
     seedId: selectedSeed?.id,
     isDefaultPlantFarming
   })
-
-  const [selectedDefaultSeed, setSelectedDefaultSeed] = useState(
-    plans?.find((item) => item.isSeedDefault)?.seedId || ''
-  )
-  const [isUpdateDefaultSeed, setIsUpdateDefaultSeed] = useState(false)
 
   const [api, contextHolder] = notification.useNotification()
   const openNotificationWithIcon = (type, title, content) => {
@@ -44,6 +40,7 @@ const PlantDetail = () => {
   }
 
   const onCreate = async (values) => {
+    setLoading(true)
     try {
       const data = {
         plantId: plantId,
@@ -91,6 +88,7 @@ const PlantDetail = () => {
       setOpenSeed(false)
       setOpenPlantFarming(false)
     }
+    setLoading(false)
   }
 
   const handleAddSeed = (values) => {
@@ -104,6 +102,7 @@ const PlantDetail = () => {
   }
 
   const handleUpdatePlantFarming = async (values) => {
+    setLoading(true)
     try {
       const res = await PLANT_FARMING.updatePlantFarming({
         plantFarmingId: selectedPlantFarmming._id,
@@ -120,9 +119,11 @@ const PlantDetail = () => {
       console.error(error)
       openNotificationWithIcon('error', 'Thông báo', 'Cập nhật thất bại')
     }
+    setLoading(false)
   }
 
   const handleDeleteConfirm = async (item) => {
+    setLoading(true)
     try {
       const res = await PLANT_FARMING.deletePlantFarming(item._id)
       if (res.status === 200) {
@@ -140,10 +141,11 @@ const PlantDetail = () => {
       console.error(error)
       openNotificationWithIcon('error', 'Thông báo', 'Xóa thất bại')
     }
+    setLoading(false)
   }
 
   const handleUpdateDefaultSeed = async (seedId) => {
-    console.log('seedId:', seedId)
+    setLoading(true)
     try {
       const res = await SEED.updateSeedDefault(seedId)
       if (res.status === 200) {
@@ -156,26 +158,11 @@ const PlantDetail = () => {
       console.error(error)
       openNotificationWithIcon('error', 'Thông báo', 'Cập nhật thất bại')
     }
-  }
-
-  const handleChange = (value) => {
-    setSelectedDefaultSeed(value)
-  }
-
-  const handleSave = () => {
-    if (selectedDefaultSeed) {
-      handleUpdateDefaultSeed(selectedDefaultSeed)
-      setSelectedDefaultSeed('')
-    }
-    setIsUpdateDefaultSeed(false)
-  }
-
-  const handleCancel = () => {
-    setSelectedDefaultSeed('')
-    setIsUpdateDefaultSeed(false)
+    setLoading(false)
   }
 
   const handleUpdateSeed = async (values) => {
+    setLoading(true)
     try {
       const res = await SEED.updateSeed({
         seedId: selectedSeed.seedId,
@@ -196,6 +183,7 @@ const PlantDetail = () => {
       console.error(error)
       openNotificationWithIcon('error', 'Thông báo', 'Cập nhật thất bại')
     }
+    setLoading(false)
   }
 
   const cultivationActivitiesColumns = [
@@ -292,49 +280,6 @@ const PlantDetail = () => {
       {isSuccessPlans && isSuccessCurrentPlant ? (
         <>
           <h1>Thông tin cây trồng {currentPlant.name}</h1>
-          <>
-            {plans.map((item) => {
-              if (item.isSeedDefault) {
-                return (
-                  <div key={item._id} style={{ display: 'flex' }}>
-                    <p style={{ marginRight: '1rem' }}>Hạt giống mặc định là: {item.name}</p>
-                    <Tooltip title="Cập nhật hạt giống mặc định">
-                      <Button
-                        shape="circle"
-                        icon={<EditOutlined />}
-                        onClick={() => {
-                          setSelectedDefaultSeed(item.seeedId)
-                          setIsUpdateDefaultSeed(true)
-                        }}
-                      />
-                    </Tooltip>
-                  </div>
-                )
-              }
-              return null
-            })}
-            {isUpdateDefaultSeed && (
-              <div style={{ marginTop: '16px', marginBottom: '16px' }}>
-                <Select
-                  style={{ width: 200, marginRight: '8px' }}
-                  defaultValue={selectedDefaultSeed}
-                  onChange={handleChange}
-                  showSearch
-                  filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                >
-                  {plans.map((item) => (
-                    <Option key={item._id} value={item.seedId}>
-                      {item.name}
-                    </Option>
-                  ))}
-                </Select>
-                <Button type="primary" onClick={handleSave} style={{ marginRight: '0.5rem' }}>
-                  Lưu
-                </Button>
-                <Button onClick={handleCancel}>Hủy</Button>
-              </div>
-            )}
-          </>
           <div>
             <Button
               type="primary"
@@ -417,11 +362,25 @@ const PlantDetail = () => {
                     />
                   </Tooltip>
                 ]}
-                extra={<img width={272} alt="logo" src={item.image} />}
+                extra={<img width={150} alt="logo" src={item.image} />}
                 style={{ backgroundColor: '#f0f0f0', marginTop: '1rem', borderRadius: '15px' }}
               >
                 <List.Item.Meta
-                  title={item.name}
+                  title={
+                    <span>
+                      {item.name}
+                      {item.isSeedDefault ? (
+                        ' (Hạt giống mặc định)'
+                      ) : (
+                        <Popconfirm
+                          title="Bạn có chắc chắn muốn đặt hạt giống này làm mặc định không?"
+                          onConfirm={() => handleUpdateDefaultSeed(item.seedId)}
+                        >
+                          <span style={{ cursor: 'pointer' }}> | Đặt làm hạt giống mặc định </span>
+                        </Popconfirm>
+                      )}
+                    </span>
+                  }
                   description={
                     <Paragraph
                       ellipsis={{
