@@ -240,17 +240,6 @@ const ManageFarmPage = () => {
         })
     },
     {
-      title: 'Địa chỉ ví',
-      dataIndex: 'walletAddress',
-      key: 'walletAddress',
-      render: (text) =>
-        formatTextTable({
-          str: text,
-          a: 8,
-          b: 5
-        })
-    },
-    {
       title: 'Tên',
       dataIndex: 'name',
       key: 'name'
