@@ -8,10 +8,7 @@ import Auth from './hooks/auth'
 import ManagePlant from './pages/ManagePlant'
 import PlantDetail from './pages/PlantDetail'
 import ManageFarms from './pages/ManageFarms'
-import ManageDistributerPage from './pages/ManageDistributers'
 import ManageClient from './pages/ManageClient'
-import ManageFarmTransaction from './pages/ManageFarmTransaction'
-import ManageTransferPage from './pages/ManageTransfer'
 import Notfound from './pages/Notfound'
 
 function App() {
@@ -24,10 +21,8 @@ function App() {
         </Route>
         <Route path="/" element={<MainLayout />}>
           <Route element={<Auth path={'/login'}>{<ManageFarms />}</Auth>} path="manage-farms" />
-          <Route element={<Auth path={'/login'}>{<ManageDistributerPage />}</Auth>} path="manage-distributers" />
           <Route element={<Auth path={'/login'}>{<ManageClient />}</Auth>} path="manage-client" />
           <Route element={<Auth path={'/login'}>{<ManagePlant />}</Auth>} path="manage-plant" />
-          <Route element={<Auth path={'/login'}>{<ManageFarmTransaction />}</Auth>} path="manage-farm-transaction" />
           {/* <Route element={<Auth path={'/login'}>{<ManageTransferPage />}</Auth>} path="manage-farm-transfer" /> */}
           <Route element={<Auth path={'/login'}>{<PlantDetail />}</Auth>} path="plant/:id" />
         </Route>
