@@ -222,7 +222,24 @@ const ManageFarmPage = () => {
   }
 
   const handleDeleteFarm = async ({ farmId }) => {
-    console.log('Farm ID:', farmId)
+    setLoading(true)
+    try {
+      const res = await FARM.deleteFarm({
+        farmId
+      })
+
+      setLoading(false)
+      if (res.status === 200) {
+        openNotificationWithIcon('success', 'Thông báo', 'Xoá thành công')
+        refetch()
+      } else {
+        openNotificationWithIcon('error', 'Thông báo', 'Xóa thất bại')
+      }
+    } catch (error) {
+      openNotificationWithIcon('error', 'Thông báo', 'Xóa thất bại')
+      setLoading(false)
+      console.log(error)
+    }
     // Gọi API hoặc xử lý xóa ở đây
   }
 
@@ -339,7 +356,7 @@ const ManageFarmPage = () => {
             <h1>Danh sách các trang trại</h1>
             <div style={{ marginBottom: 16 }}>
               <Search
-                placeholder="Tìm kiếm theo ID, Địa chỉ ví, Tên, Email, Địa chỉ"
+                placeholder="Tìm kiếm theo ID, Tên, Email, Địa chỉ"
                 allowClear
                 enterButton
                 onSearch={handleSearch}

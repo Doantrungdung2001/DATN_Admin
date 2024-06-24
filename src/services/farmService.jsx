@@ -85,7 +85,17 @@ const FARM = {
     })
 
     return result
-  }
+  },
+
+  deleteFarm: async ({ farmId}) => {
+    let result = await privateHttp({
+      method: 'DELETE',
+      url: `/farm/${farmId}`,
+    })
+
+    return result
+  },
+
 }
 
 export default FARM
