@@ -11,7 +11,7 @@ const Notfound = () => (
       <div>
         <Button type="primary">
           {' '}
-          <Link to="/home">Quay về trang chủ</Link>
+          <Link to="/manage-farms">Quay về trang chủ</Link>
         </Button>
       </div>
     }
