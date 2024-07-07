@@ -1,6 +1,112 @@
 import React from 'react'
-import { Modal, Input, Space, Form, Button, Select, Divider, Tabs, Spin } from 'antd'
+import { Modal, InputNumber, Input, Space, Form, Button, Select, Divider, Tabs, Spin } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
+
+const TimeItem = () => {
+  return (
+    <Space direction="vertical" style={{ width: '100%', margin: '8px', borderRadius: '8px', padding: '12px' }}>
+      {' '}
+      <h2 style={{ marginTop: '0' }}>Thời gian gieo trồng</h2>
+      <Space direction="vertical" style={{ width: '100%' }}>
+        <Space direction="vertical" style={{ width: '100%', borderRadius: '8px' }}>
+          <Form.List name="timeCultivates">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map((field, index) => (
+                  <div key={`timeCultivates_${index}`}>
+                    <div style={{ display: 'flex', alignItems: 'center', margin: '0 16px' }}>
+                      <Space direction="horizonal" style={{ marginTop: '8px', display: 'flex', alignItems: 'center' }}>
+                        <div style={{ display: 'flex' }}>
+                          <Form.Item fieldKey={[field.key, 'start']} name={[field.name, 'start']} label="Bắt đầu">
+                            <InputNumber min={0} placeholder="Bắt đầu" style={{ width: '80%' }} />
+                          </Form.Item>
+                          <Form.Item fieldKey={[field.key, 'end']} name={[field.name, 'end']} label="Kết thúc">
+                            <InputNumber min={0} placeholder="Kết thúc" style={{ width: '80%' }} />
+                          </Form.Item>
+                        </div>
+                      </Space>
+                      <CloseOutlined onClick={() => remove(field.name)} />
+                    </div>
+                  </div>
+                ))}
+                <Button
+                  style={{ backgroundColor: '#92a697', color: '#ffffff' }}
+                  type="dashed"
+                  onClick={() => add()}
+                  block
+                >
+                  + Thêm thông tin
+                </Button>
+              </>
+            )}
+          </Form.List>
+        </Space>
+      </Space>
+      <Divider />
+      <h2 style={{ marginTop: '0' }}>Thời gian tốt nhất để trồng</h2>
+      <Space
+        direction="horizonal"
+        style={{
+          width: '100%',
+          marginTop: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          backgroundColor: '#e9f0ea',
+          borderRadius: '8px',
+          marginRight: '16px'
+        }}
+      >
+        <Form.Item>
+          <Space
+            direction="horizonal"
+            style={{
+              width: '100%',
+              marginTop: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '16px',
+              paddingRight: '0px'
+            }}
+          >
+            <Form.Item name={['bestTimeCultivate', 'start']} label="Bắt đầu">
+              <InputNumber min={0} placeholder="Bắt đầu" style={{ width: '80%' }} />
+            </Form.Item>
+            <Form.Item name={['bestTimeCultivate', 'end']} label="Kết thúc">
+              <InputNumber min={0} placeholder="Kết thúc" style={{ width: '80%' }} />
+            </Form.Item>
+          </Space>
+        </Form.Item>
+      </Space>
+      <Divider />
+      <div>
+        <h2 style={{ marginTop: '0' }}>Thời gian trồng và thu hoạch</h2>
+        <Space
+          direction="horizonal"
+          style={{
+            width: '100%',
+            marginTop: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: '#e9f0ea',
+            borderRadius: '8px',
+            marginRight: '16px'
+          }}
+        >
+          <Form.Item
+            style={{ width: '80%', padding: '16px', paddingRight: '0px' }}
+            label="Thời gian trồng"
+            name="farmingTime"
+          >
+            <InputNumber min={0} placeholder="Thời gian trồng" style={{ width: '80%' }} />
+          </Form.Item>
+          <Form.Item label="Thời gian thu hoạch" name="harvestTime">
+            <InputNumber min={0} placeholder="Thời gian thu hoạch" style={{ width: '80%' }} />
+          </Form.Item>
+        </Space>
+      </div>
+    </Space>
+  )
+}
 
 const PesticideItem = () => {
   return (
@@ -290,6 +396,12 @@ const AddPlantFarmingPopup = ({ open, onCreate, onCancel, recommendPlantFarming,
   const [loading, setLoading] = React.useState(false)
 
   const items = [
+    {
+      key: '0',
+      label: 'Thời gian gieo trồng',
+      children: <TimeItem />,
+      forceRender: true
+    },
     {
       key: '1',
       label: 'Hoạt động làm đất',

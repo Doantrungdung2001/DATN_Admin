@@ -4,6 +4,8 @@ import PLANT from '../../services/plantService'
 
 export default function useManagePlant() {
   const farmId = localStorage.getItem('id')
+
+  console.log("Du lieu farm ID",farmId)
   const parseData = useCallback((data) => {
     const plant = data.map((plant) => ({
       _id: plant._id,

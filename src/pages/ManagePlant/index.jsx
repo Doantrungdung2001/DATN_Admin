@@ -31,6 +31,8 @@ const ManagePlant = () => {
 
   const { plantData, isSuccess, isLoading, refetch } = useManagePlant()
 
+  console.log('Toan bo du lieu cay:', plantData)
+
   const handleAddPlant = async (values) => {
     setLoading(true)
     try {
@@ -164,7 +166,7 @@ const ManagePlant = () => {
           <div>
             <h1>Danh sách các cây</h1>
             <Row>
-              <Col span={8} style={{marginRight: '2rem'}}>
+              <Col span={8} style={{ marginRight: '2rem' }}>
                 <Search
                   placeholder="Tìm kiếm cây theo tên"
                   value={searchQuery}
